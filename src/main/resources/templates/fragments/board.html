@@ -1,0 +1,43 @@
+<div th:fragment="boardFrag" id="board" xmlns:th="http://www.w3.org/1999/xhtml">
+
+    <input type="hidden" id="gameId" th:value="${game.id}">
+
+    <div class="row" style="margin-top:1%; height: 90vh;width: 100vw;">
+        <div class="col-md-1">
+        </div>
+        <div class="col-md-10" style="text-align:center;height:100%;width:100%;">
+            <div class="row" style="width:100%;height:100%;">
+                <div class="col-md-5" style="width:100%;height:100%;">
+                    <table class="center" style="width:30vw;height:30vw;">
+                        <tr th:each="row : ${game.playerBoard}" style="width:100%">
+                            <td th:each="col : ${row}">
+                                <div   th:style="${'background-color:' + (col.ship==null? '#43b5d5' : 'black') + '; border: 1px solid;width:100%;height:100%'}"></div>
+                            </td>
+                        <tr>
+                    </table>
+                </div>
+                <div class="col-md-2">
+
+                </div>
+                <div class="col-md-5" style="width:100%;height:100%;">
+                    <table class="center" style="width:30vw;height:30vw;">
+                        <tr th:each="row,iter : ${game.shootingBoard}" style="width:100%">
+                            <td th:each="col,iter : ${row}" >
+                                <a href="#" th:if="${game.actualPlayer==game.playerIndex}" style="width:100%;height:100%">
+                                    <div th:style="${'background-color:' + (!col.hit && !col.miss? '#43b5d5' : col.hit ? 'green' : 'red') + '; border: 1px solid;width:100%;height:100%'}">
+                                    </div>
+                                </a>
+
+                                <div th:if="${game.actualPlayer!=game.playerIndex}" th:style="${'background-color:' + (!col.hit && !col.miss? '#43b5d5' : col.hit ? 'green' : 'red') + '; border: 1px solid;width:100%;height:100%'}">
+                                </div>
+                            </td>
+                        <tr>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-md-1">
+        </div>
+    </div>
+</div>
