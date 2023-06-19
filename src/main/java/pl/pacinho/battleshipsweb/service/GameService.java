@@ -5,6 +5,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import pl.pacinho.battleshipsweb.config.GameConfig;
 import pl.pacinho.battleshipsweb.model.dto.GameDto;
+import pl.pacinho.battleshipsweb.model.dto.ShootDto;
 import pl.pacinho.battleshipsweb.model.dto.mapper.GameDtoMapper;
 import pl.pacinho.battleshipsweb.model.entity.Game;
 import pl.pacinho.battleshipsweb.model.enums.GameStatus;
@@ -70,4 +71,14 @@ public class GameService {
             throw new IllegalStateException("Game " + game.getId() + " in progress! You can't open game page!");
     }
 
+    public void shoot(String name, String gameId, ShootDto shootDto) {
+        Game game = gameLogicService.findById(gameId);
+        gameLogicService.shoot(name, game, shootDto);
+        finishRound(game);
+    }
+
+    private void finishRound(Game game) {
+        gameLogicService.nextPlayer(game);
+        simpMessagingTemplate.convertAndSend("/reload-board/" + game.getId(), true);
+    }
 }

@@ -11,7 +11,7 @@
                     <table class="center" style="width:30vw;height:30vw;">
                         <tr th:each="row : ${game.playerBoard}" style="width:100%">
                             <td th:each="col : ${row}">
-                                <div   th:style="${'background-color:' + (col.ship==null? '#43b5d5' : 'black') + '; border: 1px solid;width:100%;height:100%'}"></div>
+                                <div   th:style="${'background-color:' + (col.ship==null && col.hit==null? '#43b5d5' : (col.ship!=null && col.hit==null ? 'black' : (col.hit ? 'green' : 'red') )) + '; border: 1px solid;width:100%;height:100%'}"></div>
                             </td>
                         <tr>
                     </table>
@@ -22,13 +22,13 @@
                 <div class="col-md-5" style="width:100%;height:100%;">
                     <table class="center" style="width:30vw;height:30vw;">
                         <tr th:each="row,iter : ${game.shootingBoard}" style="width:100%">
-                            <td th:each="col,iter : ${row}" >
-                                <a href="#" th:if="${game.actualPlayer==game.playerIndex}" style="width:100%;height:100%">
-                                    <div th:style="${'background-color:' + (!col.hit && !col.miss? '#43b5d5' : col.hit ? 'green' : 'red') + '; border: 1px solid;width:100%;height:100%'}">
+                            <td th:each="col,iter2 : ${row}" >
+                                <a href="#" th:if="${game.actualPlayer==game.playerIndex}" style="width:100%;height:100%" th:onclick="|shoot(${iter.index},${iter2.index})|">
+                                    <div th:style="${'background-color:' + (col.hit==null ? '#43b5d5' : col.hit ? 'green' : 'red') + '; border: 1px solid;width:100%;height:100%'}">
                                     </div>
                                 </a>
 
-                                <div th:if="${game.actualPlayer!=game.playerIndex}" th:style="${'background-color:' + (!col.hit && !col.miss? '#43b5d5' : col.hit ? 'green' : 'red') + '; border: 1px solid;width:100%;height:100%'}">
+                                <div th:if="${game.actualPlayer!=game.playerIndex}" th:style="${'background-color:' + (col.hit==null ? '#43b5d5' : col.hit ? 'green' : 'red') + '; border: 1px solid;width:100%;height:100%'}">
                                 </div>
                             </td>
                         <tr>

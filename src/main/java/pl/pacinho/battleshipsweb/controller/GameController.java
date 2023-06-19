@@ -1,16 +1,19 @@
 package pl.pacinho.battleshipsweb.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import pl.pacinho.battleshipsweb.config.UIConfig;
 import pl.pacinho.battleshipsweb.model.dto.GameDto;
+import pl.pacinho.battleshipsweb.model.dto.ShootDto;
 import pl.pacinho.battleshipsweb.model.enums.GameStatus;
 import pl.pacinho.battleshipsweb.service.GameService;
 
 import javax.websocket.server.PathParam;
+import java.util.LinkedList;
 
 @RequiredArgsConstructor
 @Controller
@@ -79,5 +82,13 @@ public class GameController {
                               @PathVariable(value = "gameId") String gameId) {
         model.addAttribute("game", gameService.findDtoById(gameId, authentication.getName()));
         return "fragments/board :: boardFrag";
+    }
+
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    @PostMapping(UIConfig.SHOOT)
+    public void shoot(Authentication authentication,
+                      @RequestBody ShootDto shootDto,
+                      @PathVariable(value = "gameId") String gameId){
+        gameService.shoot(authentication.getName(), gameId, shootDto);
     }
 }

@@ -23,10 +23,4 @@ public class GameDto {
     private LocalDateTime startTime;
     private Cell[][] playerBoard;
     private Cell[][] shootingBoard;
-
-    public int getNextPlayer(int offset) {
-        int idx = playerIndex + offset;
-        if (idx > GameConfig.PLAYERS_COUNT) return idx -  GameConfig.PLAYERS_COUNT;
-        return idx;
-    }
 }
