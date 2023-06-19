@@ -73,12 +73,12 @@ public class GameService {
 
     public void shoot(String name, String gameId, ShootDto shootDto) {
         Game game = gameLogicService.findById(gameId);
-        gameLogicService.shoot(name, game, shootDto);
-        finishRound(game);
+        String result = gameLogicService.shoot(name, game, shootDto);
+        finishRound(game, result);
     }
 
-    private void finishRound(Game game) {
+    private void finishRound(Game game, String info) {
         gameLogicService.nextPlayer(game);
-        simpMessagingTemplate.convertAndSend("/reload-board/" + game.getId(), true);
+        simpMessagingTemplate.convertAndSend("/reload-board/" + game.getId(), info);
     }
 }

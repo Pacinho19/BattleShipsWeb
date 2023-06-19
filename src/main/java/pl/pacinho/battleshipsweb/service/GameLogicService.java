@@ -2,12 +2,12 @@ package pl.pacinho.battleshipsweb.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import pl.pacinho.battleshipsweb.config.GameConfig;
 import pl.pacinho.battleshipsweb.exception.GameNotFoundException;
 import pl.pacinho.battleshipsweb.model.dto.ShootDto;
 import pl.pacinho.battleshipsweb.model.entity.Cell;
 import pl.pacinho.battleshipsweb.model.entity.Game;
 import pl.pacinho.battleshipsweb.repository.GameRepository;
+import pl.pacinho.battleshipsweb.tools.BattleShipsTools;
 import pl.pacinho.battleshipsweb.tools.PlayerTools;
 
 
@@ -30,15 +30,28 @@ public class GameLogicService {
             game.setActualPlayer(1);
     }
 
-    public void shoot(String name, Game game, ShootDto shootDto) {
+    public String shoot(String name, Game game, ShootDto shootDto) {
         Cell[][] playerShootingBoard = PlayerTools.getPlayerShootingBoard(game.getPlayers(), name);
         Cell shootingCell = playerShootingBoard[shootDto.y()][shootDto.x()];
 
-        Cell[][] oponentShipsBoard = PlayerTools.getOponentShipsBoard(game.getPlayers(), name);
-        Cell oponentCell = oponentShipsBoard[shootDto.y()][shootDto.x()];
+        Cell[][] opponentShipsBoard = PlayerTools.getOponentShipsBoard(game.getPlayers(), name);
+        Cell opponentCell = opponentShipsBoard[shootDto.y()][shootDto.x()];
 
-        boolean isShip = oponentCell.getShip() != null;
+        boolean isShip = opponentCell.getShip() != null;
         shootingCell.setHit(isShip);
-        oponentCell.setHit(isShip);
+        opponentCell.setHit(isShip);
+
+        if (isShip) {
+            BattleShipsTools.checkShipSunk(opponentCell.getShip(), opponentShipsBoard);
+            return "Player " + name + " hit " + opponentCell.getShip().getMasts().size() + "-masts ship"
+                    + " on X" + shootDto.x()
+                    + ", Y" + shootDto.y()
+                    + (opponentCell.getShip().isSunk() ? " and drowned him!" : "");
+        }
+
+
+        return "Player " + name + " miss his shot"
+                + " on X" + shootDto.x()
+                + ", Y" + shootDto.y();
     }
 }

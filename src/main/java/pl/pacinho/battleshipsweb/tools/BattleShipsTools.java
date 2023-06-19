@@ -108,4 +108,14 @@ public class BattleShipsTools {
 
         return true;
     }
+
+    public static void checkShipSunk(Ship ship, Cell[][] opponentShipsBoard) {
+        boolean isShipSunk = ship.getMasts()
+                .stream()
+                .allMatch(p -> {
+                    Cell cell = opponentShipsBoard[p.x()][p.y()];
+                    return cell.getHit() != null && cell.getHit();
+                });
+        ship.setSunk(isShipSunk);
+    }
 }

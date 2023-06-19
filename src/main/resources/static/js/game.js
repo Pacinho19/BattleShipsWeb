@@ -18,19 +18,26 @@ privateStompClient = Stomp.over(socket);
 privateStompClient.connect({}, function (frame) {
     var gameId = document.getElementById('gameId').value;
     privateStompClient.subscribe('/reload-board/' + gameId, function (result) {
-        updateBoard();
+        updateBoard(result);
     });
 });
 
 stompClient = Stomp.over(socket);
 
-function updateBoard() {
+function updateBoard(result) {
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function () {
         if (xhr.readyState == XMLHttpRequest.DONE) {
             $("#board").replaceWith(xhr.responseText);
+            showInfo(result.body);
         }
     }
     xhr.open('GET', "/battle-ships/games/" + document.getElementById("gameId").value + "/board/reload", true);
     xhr.send(null);
+}
+
+function showInfo(info){
+    if(info==null) return;
+
+    document.getElementById("info").innerHTML = info;
 }
