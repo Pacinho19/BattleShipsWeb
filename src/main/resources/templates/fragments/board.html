@@ -5,15 +5,19 @@
     <div class="row" style="margin-top:1%; height: 90vh;width: 100vw;">
         <div class="col-md-2" style="text-align:center">
 
-            <h3 th:text="${game.players.get(game.playerIndex-1)}" style="width:100%;text-align:center"></h3>
-
             <th:block th:with="playerInfo=${game.gameInfoDto.playersState.get(game.playerIndex)}" style="margin-top:1%">
-                <span th:text="'Shoots: ' + ${playerInfo.shootCount}"></span>
+                <h3 style="width:100%;text-align:center">Ships Left</h3>
+                <div th:each="entry : ${playerInfo.shipCount}" style="width:100%;text-align:center">
+                    <span th:text="${entry.value + 'x: ' + entry.key  + '-masts'}"></span>
+                </div>
             </th:block>
         </div>
         <div class="col-md-8" style="text-align:center;height:100%;width:100%;">
-            <div class="row" style="width:100%;height:10%;">
-                <h4 id="info" style="text-align:center;width:100%;"></h4>
+            <div class="row" style="width:100%;height:5%;">
+                <h4 id="info" style="text-align:center;width:100%;margin: auto;"></h4>
+            </div>
+            <div class="row" style="width:100%;height:5%;">
+                <h4 th:if="${game.playerIndex==game.actualPlayer}" style="text-align:center;width:100%;margin: auto;color:red">You turn !</h4>
             </div>
             <div class="row" style="width:100%;height:90%;">
                 <div class="col-md-6" style="width:100%;height:100%;">
@@ -48,10 +52,11 @@
 
         </div>
         <div class="col-md-2" style="text-align:center">
-            <h3 th:text="${game.players.get(game.getOpponentIndex()-1)}" style="width:100%;text-align:center"></h3>
-
             <th:block th:with="playerInfo=${game.gameInfoDto.playersState.get(game.getOpponentIndex())}" style="margin-top:1%">
-                <span th:text="'Shoots: ' + ${playerInfo.shootCount}"></span>
+                <h3 style="width:100%;text-align:center">Ships Left</h3>
+                <div th:each="entry : ${playerInfo.shipCount}" style="width:100%;text-align:center">
+                            <span th:text="${entry.value + 'x: ' + entry.key  + '-masts'}"></span>
+                </div>
             </th:block>
         </div>
     </div>
