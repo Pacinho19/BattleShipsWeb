@@ -118,4 +118,21 @@ public class BattleShipsTools {
                 });
         ship.setSunk(isShipSunk);
     }
+
+    public static void hitNeighboursForDrownedShip(Ship ship, Cell[][] opponentShipsBoard, Cell[][] playerShootingBoard) {
+        ship.getMasts()
+                .stream()
+                .map(NeighboursTools::getNeighbours)
+                .flatMap(List::stream)
+                .forEach(p -> {
+                    hitCell(opponentShipsBoard, p);
+                    hitCell(playerShootingBoard, p);
+                });
+    }
+
+    private static void hitCell(Cell[][] cells, Position p) {
+        Cell cell = cells[p.x()][p.y()];
+        if (cell.getHit() == null)
+            cell.setHit(false);
+    }
 }

@@ -43,12 +43,15 @@ public class GameLogicService {
 
         if (isShip) {
             BattleShipsTools.checkShipSunk(opponentCell.getShip(), opponentShipsBoard);
+
+            if(opponentCell.getShip().isSunk())
+                BattleShipsTools.hitNeighboursForDrownedShip(opponentCell.getShip(), opponentShipsBoard, playerShootingBoard);
+
             return "Player " + name + " hit " + opponentCell.getShip().getMasts().size() + "-masts ship"
                     + " on X" + shootDto.x()
                     + ", Y" + shootDto.y()
                     + (opponentCell.getShip().isSunk() ? " and drowned him!" : "");
         }
-
 
         return "Player " + name + " miss his shot"
                 + " on X" + shootDto.x()

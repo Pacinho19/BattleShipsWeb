@@ -14,20 +14,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication()
-                .withUser("Player1")
-                .password(getPasswordEncoder().encode("test"))
+                .withUser("1")
+                .password(getPasswordEncoder().encode("1"))
                 .roles("player_role")
                 .and()
-                .withUser("Player2")
-                .password(getPasswordEncoder().encode("test"))
+                .withUser("2")
+                .password(getPasswordEncoder().encode("2"))
                 .roles("player_role")
                 .and()
-                .withUser("Player3")
-                .password(getPasswordEncoder().encode("test"))
+                .withUser("3")
+                .password(getPasswordEncoder().encode("3"))
                 .roles("player_role")
                 .and()
-                .withUser("Player4")
-                .password(getPasswordEncoder().encode("test"))
+                .withUser("4")
+                .password(getPasswordEncoder().encode("4"))
                 .roles("player_role");
     }
 
