@@ -12,4 +12,8 @@ public class Ship {
 
     private List<Position> masts;
     private boolean sunk;
+
+    public int getMastsCount() {
+        return masts.size();
+    }
 }

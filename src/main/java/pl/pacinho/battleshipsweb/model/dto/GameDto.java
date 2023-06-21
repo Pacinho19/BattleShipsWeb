@@ -3,8 +3,8 @@ package pl.pacinho.battleshipsweb.model.dto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import pl.pacinho.battleshipsweb.config.GameConfig;
 import pl.pacinho.battleshipsweb.model.entity.Cell;
+import pl.pacinho.battleshipsweb.model.entity.GameInfo;
 import pl.pacinho.battleshipsweb.model.enums.GameStatus;
 
 import java.time.LocalDateTime;
@@ -23,4 +23,11 @@ public class GameDto {
     private LocalDateTime startTime;
     private Cell[][] playerBoard;
     private Cell[][] shootingBoard;
+    private GameInfo gameInfoDto;
+
+    public int getOpponentIndex() {
+        if (playerIndex == players.size())
+            return 1;
+        return playerIndex+1;
+    }
 }

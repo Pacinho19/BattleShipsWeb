@@ -51,7 +51,10 @@ public class GameRepository {
         if (game.getPlayers().get(0).getName().equals(name))
             throw new IllegalStateException("Game " + gameId + " was created by you!");
 
-        game.getPlayers().add(new Player(name, game.getPlayers().size() + 1));
+        Player player = new Player(name, game.getPlayers().size() + 1);
+        game.getPlayers().add(player);
+        game.getGameInfoDto().addPlayer(player);
+
         return game;
     }
 

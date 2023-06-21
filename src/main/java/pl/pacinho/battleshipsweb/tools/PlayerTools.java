@@ -1,6 +1,7 @@
 package pl.pacinho.battleshipsweb.tools;
 
 import pl.pacinho.battleshipsweb.model.entity.Cell;
+import pl.pacinho.battleshipsweb.model.entity.Game;
 import pl.pacinho.battleshipsweb.model.entity.Player;
 
 import java.util.LinkedList;
@@ -35,5 +36,14 @@ public class PlayerTools {
                 .findFirst();
 
         return playerOptional.map(Player::getPlayerShipsBoard).orElse(null);
+    }
+
+    public static Integer getPlayerIndex(Game game, String name) {
+        return game.getPlayers()
+                .stream()
+                .filter(p -> p.getName().equals(name))
+                .findFirst()
+                .map(Player::getIndex)
+                .orElseThrow(() -> new IllegalArgumentException("Unknown player: " + name));
     }
 }

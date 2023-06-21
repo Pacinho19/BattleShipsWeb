@@ -18,14 +18,18 @@ public class Game {
     @Setter
     private int actualPlayer;
     private LocalDateTime startTime;
+    private GameInfo gameInfoDto;
 
     public Game(String player1) {
         players = new LinkedList<>();
-        players.add(new Player(player1, 1));
+        Player player = new Player(player1, 1);
+        players.add(player);
         this.id = UUID.randomUUID().toString();
         this.status = GameStatus.NEW;
         this.startTime = LocalDateTime.now();
         this.actualPlayer = 1;
+        this.gameInfoDto = new GameInfo();
+        gameInfoDto.addPlayer(player);
     }
 
 }

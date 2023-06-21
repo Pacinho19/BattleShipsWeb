@@ -3,13 +3,12 @@ package pl.pacinho.battleshipsweb.tools;
 import pl.pacinho.battleshipsweb.config.GameConfig;
 import pl.pacinho.battleshipsweb.model.dto.Position;
 import pl.pacinho.battleshipsweb.model.entity.Cell;
+import pl.pacinho.battleshipsweb.model.entity.GameInfo;
 import pl.pacinho.battleshipsweb.model.entity.Ship;
 import pl.pacinho.battleshipsweb.model.enums.ShipType;
 import pl.pacinho.battleshipsweb.utils.RandomUtils;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -134,5 +133,26 @@ public class BattleShipsTools {
         Cell cell = cells[p.x()][p.y()];
         if (cell.getHit() == null)
             cell.setHit(false);
+    }
+
+    public static Map<Integer, Long> getShipCount(Cell[][] playerShipsBoard) {
+        return Arrays.stream(playerShipsBoard)
+                .flatMap(Arrays::stream)
+                .map(Cell::getShip)
+                .filter(Objects::nonNull)
+                .distinct()
+                .collect(Collectors.groupingBy(Ship::getMastsCount, Collectors.counting()));
+
+    }
+
+    public static void updateShipsCount(Integer playerIndex, Ship ship, GameInfo gameInfoDto) {
+        Map<Integer, Long> shipCount = gameInfoDto.getPlayersState()
+                .get(playerIndex)
+                .getShipCount();
+        shipCount.put(ship.getMastsCount(), shipCount.get(ship.getMastsCount()) - 1);
+    }
+
+    public static void incrementShotCount(GameInfo gameInfoDto, Integer playerIndex) {
+        gameInfoDto.getPlayersState().get(playerIndex).incrementShotCount();
     }
 }

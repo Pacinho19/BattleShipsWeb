@@ -41,11 +41,15 @@ public class GameLogicService {
         shootingCell.setHit(isShip);
         opponentCell.setHit(isShip);
 
+        BattleShipsTools.incrementShotCount(game.getGameInfoDto(), PlayerTools.getPlayerIndex(game, name));
+
         if (isShip) {
             BattleShipsTools.checkShipSunk(opponentCell.getShip(), opponentShipsBoard);
 
-            if(opponentCell.getShip().isSunk())
+            if(opponentCell.getShip().isSunk()){
                 BattleShipsTools.hitNeighboursForDrownedShip(opponentCell.getShip(), opponentShipsBoard, playerShootingBoard);
+                BattleShipsTools.updateShipsCount(PlayerTools.getPlayerIndex(game, name), opponentCell.getShip(), game.getGameInfoDto());
+            }
 
             return "Player " + name + " hit " + opponentCell.getShip().getMasts().size() + "-masts ship"
                     + " on X" + shootDto.x()
@@ -53,6 +57,7 @@ public class GameLogicService {
                     + (opponentCell.getShip().isSunk() ? " and drowned him!" : "");
         }
 
+        nextPlayer(game);
         return "Player " + name + " miss his shot"
                 + " on X" + shootDto.x()
                 + ", Y" + shootDto.y();

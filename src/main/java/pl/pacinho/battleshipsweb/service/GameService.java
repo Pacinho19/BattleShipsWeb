@@ -78,7 +78,6 @@ public class GameService {
     }
 
     private void finishRound(Game game, String info) {
-        gameLogicService.nextPlayer(game);
         simpMessagingTemplate.convertAndSend("/reload-board/" + game.getId(), info);
     }
 }

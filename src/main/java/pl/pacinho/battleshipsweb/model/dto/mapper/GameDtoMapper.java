@@ -1,13 +1,11 @@
 package pl.pacinho.battleshipsweb.model.dto.mapper;
 
 import pl.pacinho.battleshipsweb.model.dto.GameDto;
-import pl.pacinho.battleshipsweb.model.entity.Cell;
 import pl.pacinho.battleshipsweb.model.entity.Game;
 import pl.pacinho.battleshipsweb.model.entity.Player;
 import pl.pacinho.battleshipsweb.tools.PlayerTools;
 
 import java.util.*;
-import java.util.function.Function;
 
 public class GameDtoMapper {
 
@@ -23,6 +21,7 @@ public class GameDtoMapper {
                 .startTime(game.getStartTime())
                 .playerBoard(PlayerTools.getPlayerShipsBoard(game.getPlayers(), name))
                 .shootingBoard(PlayerTools.getPlayerShootingBoard(game.getPlayers(), name))
+                .gameInfoDto(game.getGameInfoDto())
                 .build();
     }
 
@@ -35,7 +34,6 @@ public class GameDtoMapper {
         return playerOpt.get()
                 .getIndex();
     }
-
 
 
 }
