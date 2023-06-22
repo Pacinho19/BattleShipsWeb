@@ -1,7 +1,6 @@
 package pl.pacinho.battleshipsweb.service;
 
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import pl.pacinho.battleshipsweb.config.GameConfig;
@@ -14,9 +13,9 @@ import pl.pacinho.battleshipsweb.model.entity.Game;
 import pl.pacinho.battleshipsweb.model.enums.GameStatus;
 import pl.pacinho.battleshipsweb.model.enums.GameType;
 import pl.pacinho.battleshipsweb.repository.GameRepository;
-import pl.pacinho.battleshipsweb.tools.BattleShipsTools;
 import pl.pacinho.battleshipsweb.tools.CpuGun;
 import pl.pacinho.battleshipsweb.tools.PlayerTools;
+import pl.pacinho.battleshipsweb.utils.SleepUtils;
 
 import java.util.List;
 
@@ -81,14 +80,13 @@ public class GameService {
             throw new IllegalStateException("Game " + game.getId() + " in progress! You can't open game page!");
     }
 
-    @SneakyThrows
     public void shot(String name, String gameId, ShotDto shotDto) {
         Game game = gameLogicService.findById(gameId);
         String result = gameLogicService.shot(name, game, shotDto);
         finishRound(game, new ReloadBoardDto(result, getShotAnimationInfo(shotDto, PlayerTools.getOponentName(name, game))));
 
-        if (PlayerTools.isCPUTurn(game)){
-            Thread.sleep(1_000);
+        if (PlayerTools.isCPUTurn(game)) {
+            SleepUtils.sleep(1_000);
             shot("CPU", gameId, CpuGun.shot(gameId, PlayerTools.getPlayerShootingBoard(game.getPlayers(), "CPU")));
         }
     }
