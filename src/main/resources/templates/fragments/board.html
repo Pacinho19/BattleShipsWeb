@@ -6,7 +6,7 @@
     <div class="row" style="margin-top:1%; height: 90vh;width: 100vw;">
         <div class="col-md-2" style="text-align:center">
 
-            <th:block th:with="playerInfo=${game.gameInfoDto.playersState.get(game.playerIndex)}" style="margin-top:1%">
+            <th:block th:with="playerInfo=${game.gameInfoDto.playersState.get(game.getOpponentIndex())}" style="margin-top:1%">
                 <h3 style="width:100%;text-align:center">Ships Left</h3>
                 <div th:each="entry : ${playerInfo.shipCount}" style="width:100%;text-align:center">
                     <span th:text="${entry.value + 'x: ' + entry.key  + '-masts'}"></span>
@@ -53,7 +53,7 @@
 
         </div>
         <div class="col-md-2" style="text-align:center">
-            <th:block th:with="playerInfo=${game.gameInfoDto.playersState.get(game.getOpponentIndex())}" style="margin-top:1%">
+            <th:block th:with="playerInfo=${game.gameInfoDto.playersState.get(game.playerIndex)}" style="margin-top:1%">
                 <h3 style="width:100%;text-align:center">Ships Left</h3>
                 <div th:each="entry : ${playerInfo.shipCount}" style="width:100%;text-align:center">
                             <span th:text="${entry.value + 'x: ' + entry.key  + '-masts'}"></span>
