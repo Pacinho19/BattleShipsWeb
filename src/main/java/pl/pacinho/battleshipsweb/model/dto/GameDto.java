@@ -22,7 +22,7 @@ public class GameDto {
     private Integer actualPlayer;
     private LocalDateTime startTime;
     private Cell[][] playerBoard;
-    private Cell[][] shootingBoard;
+    private Cell[][] shotingBoard;
     private GameInfo gameInfoDto;
 
     public int getOpponentIndex() {

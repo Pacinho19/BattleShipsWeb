@@ -28,6 +28,24 @@
         <script type="text/javascript" th:src="@{/js/game.js}"></script>
         <script type="text/javascript" th:src="@{/js/core.js}"></script>
 
+        <style>
+                @keyframes pulse {
+                    0% {
+                        transform: scale(0.90);
+                        box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.7);
+                    }
+
+                    70% {
+                        transform: scale(1.5);
+                        box-shadow: 0 0 0 10px rgba(0, 0, 0, 0);
+                    }
+
+                    100% {
+                        transform: scale(0.90);
+                        box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+                    }
+                }
+        </style>
 </head>
 
 <body>

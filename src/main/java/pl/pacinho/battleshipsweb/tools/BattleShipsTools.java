@@ -118,14 +118,14 @@ public class BattleShipsTools {
         ship.setSunk(isShipSunk);
     }
 
-    public static void hitNeighboursForDrownedShip(Ship ship, Cell[][] opponentShipsBoard, Cell[][] playerShootingBoard) {
+    public static void hitNeighboursForDrownedShip(Ship ship, Cell[][] opponentShipsBoard, Cell[][] playershotingBoard) {
         ship.getMasts()
                 .stream()
                 .map(NeighboursTools::getNeighbours)
                 .flatMap(List::stream)
                 .forEach(p -> {
                     hitCell(opponentShipsBoard, p);
-                    hitCell(playerShootingBoard, p);
+                    hitCell(playershotingBoard, p);
                 });
     }
 

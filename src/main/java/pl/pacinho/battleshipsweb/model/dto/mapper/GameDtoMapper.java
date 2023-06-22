@@ -20,7 +20,7 @@ public class GameDtoMapper {
                 .actualPlayer(game.getActualPlayer())
                 .startTime(game.getStartTime())
                 .playerBoard(PlayerTools.getPlayerShipsBoard(game.getPlayers(), name))
-                .shootingBoard(PlayerTools.getPlayerShootingBoard(game.getPlayers(), name))
+                .shotingBoard(PlayerTools.getPlayerShootingBoard(game.getPlayers(), name))
                 .gameInfoDto(game.getGameInfoDto())
                 .build();
     }

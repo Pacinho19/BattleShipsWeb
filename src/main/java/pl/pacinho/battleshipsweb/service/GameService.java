@@ -5,11 +5,14 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import pl.pacinho.battleshipsweb.config.GameConfig;
 import pl.pacinho.battleshipsweb.model.dto.GameDto;
-import pl.pacinho.battleshipsweb.model.dto.ShootDto;
+import pl.pacinho.battleshipsweb.model.dto.ReloadBoardDto;
+import pl.pacinho.battleshipsweb.model.dto.ShotAnimationDto;
+import pl.pacinho.battleshipsweb.model.dto.ShotDto;
 import pl.pacinho.battleshipsweb.model.dto.mapper.GameDtoMapper;
 import pl.pacinho.battleshipsweb.model.entity.Game;
 import pl.pacinho.battleshipsweb.model.enums.GameStatus;
 import pl.pacinho.battleshipsweb.repository.GameRepository;
+import pl.pacinho.battleshipsweb.tools.PlayerTools;
 
 import java.util.List;
 
@@ -71,13 +74,17 @@ public class GameService {
             throw new IllegalStateException("Game " + game.getId() + " in progress! You can't open game page!");
     }
 
-    public void shoot(String name, String gameId, ShootDto shootDto) {
+    public void shot(String name, String gameId, ShotDto shotDto) {
         Game game = gameLogicService.findById(gameId);
-        String result = gameLogicService.shoot(name, game, shootDto);
-        finishRound(game, result);
+        String result = gameLogicService.shot(name, game, shotDto);
+        finishRound(game, new ReloadBoardDto(result, getShotAnimationInfo(shotDto,PlayerTools.getOponentName(name, game))));
     }
 
-    private void finishRound(Game game, String info) {
+    private ShotAnimationDto getShotAnimationInfo(ShotDto shotDto, String oponentName) {
+        return new ShotAnimationDto(shotDto, oponentName);
+    }
+
+    private void finishRound(Game game, ReloadBoardDto info) {
         simpMessagingTemplate.convertAndSend("/reload-board/" + game.getId(), info);
     }
 }

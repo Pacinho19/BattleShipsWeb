@@ -8,17 +8,17 @@ import java.util.Map;
 @Getter
 public class PlayerState {
 
-    private int shootCount;
+    private int shotCount;
 
     @Setter
     private Map<Integer, Long> shipCount;
 
     public PlayerState(Map<Integer, Long> shipCount) {
-        this.shootCount = 0;
+        this.shotCount = 0;
         this.shipCount = shipCount;
     }
 
     public void incrementShotCount() {
-        shootCount++;
+        shotCount++;
     }
 }

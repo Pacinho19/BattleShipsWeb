@@ -1,12 +1,12 @@
-function shoot(yValue, xValue){
+function shot(yValue, xValue){
   var xhr = new XMLHttpRequest();
-    var url = '/battle-ships/games/' + document.getElementById("gameId").value + '/shoot';
+    var url = '/battle-ships/games/' + document.getElementById("gameId").value + '/shot';
     xhr.open("POST", url, true);
     xhr.setRequestHeader("Content-Type", "application/json");
     xhr.onreadystatechange = function () { };
 
-    let shootObj = {x:xValue, y:yValue};
-    var data = JSON.stringify(shootObj);
+    let shotObj = {x:xValue, y:yValue};
+    var data = JSON.stringify(shotObj);
     xhr.send(data);
 }
 
@@ -29,7 +29,11 @@ function updateBoard(result) {
     xhr.onreadystatechange = function () {
         if (xhr.readyState == XMLHttpRequest.DONE) {
             $("#board").replaceWith(xhr.responseText);
-            showInfo(result.body);
+
+             var obj = JSON.parse(result.body);
+
+            showInfo(obj.message);
+            shotAnimation(obj.shotAnimationInfo);
         }
     }
     xhr.open('GET', "/battle-ships/games/" + document.getElementById("gameId").value + "/board/reload", true);
@@ -38,6 +42,19 @@ function updateBoard(result) {
 
 function showInfo(info){
     if(info==null) return;
-
     document.getElementById("info").innerHTML = info;
+}
+
+function shotAnimation(shotObj){
+    if(shotObj==null) return;
+
+    var playerName = document.getElementById('playerName').innerHTML;
+
+    console.log(shotObj);
+    console.log(playerName);
+
+    if(playerName!=shotObj.playerName) return;
+
+    var cell = document.getElementById(shotObj.shotDto.x+"_"+shotObj.shotDto.y);
+    cell.style.animation = 'pulse 2s normal'
 }

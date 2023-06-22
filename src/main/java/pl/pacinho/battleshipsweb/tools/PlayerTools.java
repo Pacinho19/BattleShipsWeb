@@ -46,4 +46,13 @@ public class PlayerTools {
                 .map(Player::getIndex)
                 .orElseThrow(() -> new IllegalArgumentException("Unknown player: " + name));
     }
+
+    public static String getOponentName(String name, Game game) {
+        return game.getPlayers()
+                .stream()
+                .filter(p -> !p.getName().equals(name))
+                .findFirst()
+                .map(Player::getName)
+                .orElseThrow(() -> new IllegalArgumentException("Cannot find oponent name for player " + name + " in game " + game.getId()));
+    }
 }

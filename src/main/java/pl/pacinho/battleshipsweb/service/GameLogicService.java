@@ -3,7 +3,7 @@ package pl.pacinho.battleshipsweb.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.pacinho.battleshipsweb.exception.GameNotFoundException;
-import pl.pacinho.battleshipsweb.model.dto.ShootDto;
+import pl.pacinho.battleshipsweb.model.dto.ShotDto;
 import pl.pacinho.battleshipsweb.model.entity.Cell;
 import pl.pacinho.battleshipsweb.model.entity.Game;
 import pl.pacinho.battleshipsweb.model.enums.GameStatus;
@@ -31,15 +31,15 @@ public class GameLogicService {
             game.setActualPlayer(1);
     }
 
-    public String shoot(String name, Game game, ShootDto shootDto) {
+    public String shot(String name, Game game, ShotDto shotDto) {
         Cell[][] playerShootingBoard = PlayerTools.getPlayerShootingBoard(game.getPlayers(), name);
-        Cell shootingCell = playerShootingBoard[shootDto.y()][shootDto.x()];
+        Cell shotingCell = playerShootingBoard[shotDto.y()][shotDto.x()];
 
         Cell[][] opponentShipsBoard = PlayerTools.getOponentShipsBoard(game.getPlayers(), name);
-        Cell opponentCell = opponentShipsBoard[shootDto.y()][shootDto.x()];
+        Cell opponentCell = opponentShipsBoard[shotDto.y()][shotDto.x()];
 
         boolean isShip = opponentCell.getShip() != null;
-        shootingCell.setHit(isShip);
+        shotingCell.setHit(isShip);
         opponentCell.setHit(isShip);
 
         BattleShipsTools.incrementShotCount(game.getGameInfoDto(), PlayerTools.getPlayerIndex(game, name));
@@ -58,14 +58,14 @@ public class GameLogicService {
             }
 
             return "Player " + name + " hit " + opponentCell.getShip().getMasts().size() + "-masts ship"
-                    + " on X" + shootDto.x()
-                    + ", Y" + shootDto.y()
+                    + " on X" + shotDto.x()
+                    + ", Y" + shotDto.y()
                     + (opponentCell.getShip().isSunk() ? " and drowned him!" : "");
         }
 
         nextPlayer(game);
         return "Player " + name + " miss his shot"
-                + " on X" + shootDto.x()
-                + ", Y" + shootDto.y();
+                + " on X" + shotDto.x()
+                + ", Y" + shotDto.y();
     }
 }
