@@ -155,4 +155,13 @@ public class BattleShipsTools {
     public static void incrementShotCount(GameInfo gameInfoDto, Integer playerIndex) {
         gameInfoDto.getPlayersState().get(playerIndex).incrementShotCount();
     }
+
+    public static boolean checkAllShipsIsSunk(Integer playerIndex, GameInfo gameInfoDto) {
+        return gameInfoDto.getPlayersState()
+                .get(playerIndex)
+                .getShipCount()
+                .values()
+                .stream()
+                .reduce(0L, Long::sum) == 0;
+    }
 }

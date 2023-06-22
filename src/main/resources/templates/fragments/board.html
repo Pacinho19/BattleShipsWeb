@@ -17,7 +17,7 @@
                 <h4 id="info" style="text-align:center;width:100%;margin: auto;"></h4>
             </div>
             <div class="row" style="width:100%;height:5%;">
-                <h4 th:if="${game.playerIndex==game.actualPlayer}" style="text-align:center;width:100%;margin: auto;color:red">You turn !</h4>
+                <h4 th:if="${game.playerIndex==game.actualPlayer && game.status.name=='IN_PROGRESS'}" style="text-align:center;width:100%;margin: auto;color:red">You turn !</h4>
             </div>
             <div class="row" style="width:100%;height:90%;">
                 <div class="col-md-6" style="width:100%;height:100%;">
@@ -35,13 +35,13 @@
                     <table class="center" style="width:30vw;height:30vw;margin-top:1%">
                         <tr th:each="row,iter : ${game.shootingBoard}" style="width:100%">
                             <td th:each="col,iter2 : ${row}">
-                                <a href="#" th:if="${game.actualPlayer==game.playerIndex && col.hit==null}"
+                                <a href="#" th:if="${game.actualPlayer==game.playerIndex && col.hit==null && game.status.name=='IN_PROGRESS'}"
                                    style="width:100%;height:100%" th:onclick="|shoot(${iter.index},${iter2.index})|">
                                     <div th:style="${'background-color:' + (col.hit==null ? '#43b5d5' : col.hit ? 'green' : 'red') + '; border: 1px solid;width:100%;height:100%'}">
                                     </div>
                                 </a>
 
-                                <div th:if="${game.actualPlayer!=game.playerIndex || (game.actualPlayer==game.playerIndex && col.hit!=null)}"
+                                <div th:if="${game.actualPlayer!=game.playerIndex || (game.actualPlayer==game.playerIndex && col.hit!=null) || game.status.name=='FINISHED'} "
                                      th:style="${'background-color:' + (col.hit==null ? '#43b5d5' : col.hit ? 'green' : 'red') + '; border: 1px solid;width:100%;height:100%'}">
                                 </div>
                             </td>

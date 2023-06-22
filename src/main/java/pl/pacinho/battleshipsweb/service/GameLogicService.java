@@ -6,6 +6,7 @@ import pl.pacinho.battleshipsweb.exception.GameNotFoundException;
 import pl.pacinho.battleshipsweb.model.dto.ShootDto;
 import pl.pacinho.battleshipsweb.model.entity.Cell;
 import pl.pacinho.battleshipsweb.model.entity.Game;
+import pl.pacinho.battleshipsweb.model.enums.GameStatus;
 import pl.pacinho.battleshipsweb.repository.GameRepository;
 import pl.pacinho.battleshipsweb.tools.BattleShipsTools;
 import pl.pacinho.battleshipsweb.tools.PlayerTools;
@@ -49,6 +50,11 @@ public class GameLogicService {
             if(opponentCell.getShip().isSunk()){
                 BattleShipsTools.hitNeighboursForDrownedShip(opponentCell.getShip(), opponentShipsBoard, playerShootingBoard);
                 BattleShipsTools.updateShipsCount(PlayerTools.getPlayerIndex(game, name), opponentCell.getShip(), game.getGameInfoDto());
+            }
+
+            if(BattleShipsTools.checkAllShipsIsSunk(PlayerTools.getPlayerIndex(game, name), game.getGameInfoDto())){
+                game.setStatus(GameStatus.FINISHED);
+                return "Player " + name + " win the game !";
             }
 
             return "Player " + name + " hit " + opponentCell.getShip().getMasts().size() + "-masts ship"
