@@ -55,4 +55,10 @@ public class PlayerTools {
                 .map(Player::getName)
                 .orElseThrow(() -> new IllegalArgumentException("Cannot find oponent name for player " + name + " in game " + game.getId()));
     }
+
+    public static boolean isCPUTurn(Game game) {
+        return game.getPlayers()
+                .get(game.getActualPlayer() - 1)
+                .isCPU();
+    }
 }

@@ -7,6 +7,7 @@ import pl.pacinho.battleshipsweb.model.dto.mapper.GameDtoMapper;
 import pl.pacinho.battleshipsweb.model.entity.Game;
 import pl.pacinho.battleshipsweb.model.entity.Player;
 import pl.pacinho.battleshipsweb.model.enums.GameStatus;
+import pl.pacinho.battleshipsweb.model.enums.GameType;
 
 import java.util.HashMap;
 import java.util.List;
@@ -22,8 +23,8 @@ public class GameRepository {
         gameMap = new HashMap<>();
     }
 
-    public String newGame(String playerName) {
-        Game game = new Game(playerName);
+    public String newGame(String playerName, GameType gameType) {
+        Game game = new Game(playerName, gameType);
         gameMap.put(game.getId(), game);
         return game.getId();
     }
@@ -40,7 +41,7 @@ public class GameRepository {
         return Optional.ofNullable(gameMap.get(gameId));
     }
 
-    public Game joinGame(String name, String gameId) throws IllegalStateException {
+    public Game joinGame(String name, String gameId, boolean isCPU) throws IllegalStateException {
         Game game = gameMap.get(gameId);
         if (game == null)
             throw new GameNotFoundException(gameId);
@@ -51,7 +52,7 @@ public class GameRepository {
         if (game.getPlayers().get(0).getName().equals(name))
             throw new IllegalStateException("Game " + gameId + " was created by you!");
 
-        Player player = new Player(name, game.getPlayers().size() + 1);
+        Player player = new Player(name, game.getPlayers().size() + 1, isCPU);
         game.getPlayers().add(player);
         game.getGameInfoDto().addPlayer(player);
 

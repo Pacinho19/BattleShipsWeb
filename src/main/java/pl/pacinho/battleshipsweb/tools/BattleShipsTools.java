@@ -2,6 +2,7 @@ package pl.pacinho.battleshipsweb.tools;
 
 import pl.pacinho.battleshipsweb.config.GameConfig;
 import pl.pacinho.battleshipsweb.model.dto.Position;
+import pl.pacinho.battleshipsweb.model.dto.ShotDto;
 import pl.pacinho.battleshipsweb.model.entity.Cell;
 import pl.pacinho.battleshipsweb.model.entity.GameInfo;
 import pl.pacinho.battleshipsweb.model.entity.Ship;
@@ -18,7 +19,7 @@ public class BattleShipsTools {
         Cell[][] cells = new Cell[GameConfig.BOARD_SIZE][GameConfig.BOARD_SIZE];
         for (int i = 0; i < cells.length; i++) {
             for (int j = 0; j < cells[i].length; j++) {
-                cells[i][j] = new Cell();
+                cells[i][j] = new Cell(j, i);
             }
         }
         return cells;
@@ -163,5 +164,16 @@ public class BattleShipsTools {
                 .values()
                 .stream()
                 .reduce(0L, Long::sum) == 0;
+    }
+
+    public static ShotDto randomShot(Cell[][] shipsBoard) {
+        List<Cell> availablePos = Arrays.stream(shipsBoard)
+                .flatMap(Arrays::stream)
+                .filter(c -> c.getHit() == null)
+                .toList();
+
+        int shotIdx = RandomUtils.getInt(0, availablePos.size() - 1);
+        Cell cell = availablePos.get(shotIdx);
+        return new ShotDto(cell.getX(), cell.getY());
     }
 }

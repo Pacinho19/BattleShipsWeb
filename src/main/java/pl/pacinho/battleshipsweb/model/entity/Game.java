@@ -3,6 +3,7 @@ package pl.pacinho.battleshipsweb.model.entity;
 import lombok.Getter;
 import lombok.Setter;
 import pl.pacinho.battleshipsweb.model.enums.GameStatus;
+import pl.pacinho.battleshipsweb.model.enums.GameType;
 
 import java.time.LocalDateTime;
 import java.util.LinkedList;
@@ -19,11 +20,13 @@ public class Game {
     private int actualPlayer;
     private LocalDateTime startTime;
     private GameInfo gameInfoDto;
+    private GameType gameType;
 
-    public Game(String player1) {
+    public Game(String player1, GameType gameType) {
         players = new LinkedList<>();
-        Player player = new Player(player1, 1);
+        Player player = new Player(player1, 1, false);
         players.add(player);
+        this.gameType = gameType;
         this.id = UUID.randomUUID().toString();
         this.status = GameStatus.NEW;
         this.startTime = LocalDateTime.now();

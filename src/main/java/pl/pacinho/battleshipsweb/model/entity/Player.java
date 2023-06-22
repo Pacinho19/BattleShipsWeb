@@ -10,8 +10,10 @@ public class Player {
     private int index;
     private Cell[][] playerShipsBoard;
     private Cell[][] shootingBoard;
+    private boolean CPU;
 
-    public Player(String name, int index) {
+    public Player(String name, int index, boolean CPU) {
+        this.CPU=CPU;
         this.name = name;
         this.index = index;
         this.shootingBoard = BattleShipsTools.initFreeBoard();

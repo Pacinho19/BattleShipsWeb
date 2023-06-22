@@ -10,6 +10,7 @@ import pl.pacinho.battleshipsweb.config.UIConfig;
 import pl.pacinho.battleshipsweb.model.dto.GameDto;
 import pl.pacinho.battleshipsweb.model.dto.ShotDto;
 import pl.pacinho.battleshipsweb.model.enums.GameStatus;
+import pl.pacinho.battleshipsweb.model.enums.GameType;
 import pl.pacinho.battleshipsweb.service.GameService;
 
 @RequiredArgsConstructor
@@ -30,9 +31,9 @@ public class GameController {
     }
 
     @PostMapping(UIConfig.NEW_GAME)
-    public String newGame(Model model, Authentication authentication) {
+    public String newGame(Model model, Authentication authentication, @RequestParam("gameType") GameType gameType) {
         try {
-            return "redirect:" + UIConfig.GAMES + "/" + gameService.newGame(authentication.getName()) + "/room";
+            return "redirect:" + UIConfig.GAMES + "/" + gameService.newGame(authentication.getName(), gameType) + (gameType==GameType.PLAYER ? "/room" : "");
         } catch (Exception e) {
             model.addAttribute("error", e.getMessage());
             return gameHome(model);
@@ -84,8 +85,8 @@ public class GameController {
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     @PostMapping(UIConfig.shot)
     public void shot(Authentication authentication,
-                      @RequestBody ShotDto shotDto,
-                      @PathVariable(value = "gameId") String gameId){
+                     @RequestBody ShotDto shotDto,
+                     @PathVariable(value = "gameId") String gameId) {
         gameService.shot(authentication.getName(), gameId, shotDto);
     }
 }

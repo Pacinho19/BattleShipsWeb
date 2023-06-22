@@ -21,7 +21,7 @@ public class BattleShipsWsController {
     public void join(@Payload GameActionDto gameActionDto, Authentication authentication) {
         String exception = null;
         try {
-            gameService.joinGame(authentication.getName(), gameActionDto.getGameId());
+            gameService.joinGame(authentication.getName(), gameActionDto.getGameId(), false);
         } catch (Exception ex) {
             exception = ex.getMessage();
         }

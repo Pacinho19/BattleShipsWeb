@@ -64,10 +64,33 @@
 
     </div>
     <div class="col-md-2" style="text-align:center; margin-top:1%">
-        <form th:action="@{'/battle-ships/games/new'}" th:method="post">
-            <button type="submit" class="btn btn-primary">New Game
-            </button>
-        </form>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#gameOptionsModal">New Game</button>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="gameOptionsModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Game options</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form th:action="@{'/battle-ships/games/new'}" th:method="post">
+                <div class="modal-body">
+                    <span style="display:inline-block">Game mode</span>
+                    <select style="display:inline-block;margin-left: 1%;width:70%" class="form-control selectpicker" name="gameType">
+                        <option value="PLAYER">vs Player</option>
+                        <option value="CPU">vs CPU</option>
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Create Game</button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 
