@@ -166,14 +166,4 @@ public class BattleShipsTools {
                 .reduce(0L, Long::sum) == 0;
     }
 
-    public static ShotDto randomShot(Cell[][] shipsBoard) {
-        List<Cell> availablePos = Arrays.stream(shipsBoard)
-                .flatMap(Arrays::stream)
-                .filter(c -> c.getHit() == null)
-                .toList();
-
-        int shotIdx = RandomUtils.getInt(0, availablePos.size() - 1);
-        Cell cell = availablePos.get(shotIdx);
-        return new ShotDto(cell.getX(), cell.getY());
-    }
 }

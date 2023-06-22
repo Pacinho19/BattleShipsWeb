@@ -15,6 +15,7 @@ import pl.pacinho.battleshipsweb.model.enums.GameStatus;
 import pl.pacinho.battleshipsweb.model.enums.GameType;
 import pl.pacinho.battleshipsweb.repository.GameRepository;
 import pl.pacinho.battleshipsweb.tools.BattleShipsTools;
+import pl.pacinho.battleshipsweb.tools.CpuGun;
 import pl.pacinho.battleshipsweb.tools.PlayerTools;
 
 import java.util.List;
@@ -88,7 +89,7 @@ public class GameService {
 
         if (PlayerTools.isCPUTurn(game)){
             Thread.sleep(1_000);
-            shot("CPU", gameId, BattleShipsTools.randomShot(PlayerTools.getPlayerShipsBoard(game.getPlayers(), "CPU")));
+            shot("CPU", gameId, CpuGun.shot(gameId, PlayerTools.getPlayerShootingBoard(game.getPlayers(), "CPU")));
         }
     }
 
