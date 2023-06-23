@@ -185,9 +185,10 @@ public class BattleShipsTools {
     }
 
     private static List<Position> getNewShipPositions(NewShipDto newShipDto) {
+        final boolean offsetX = newShipDto.shipType() == ShipType.HORIZONTAL;
         return IntStream.range(0, newShipDto.mastsCount())
                 .boxed()
-                .map(i -> new Position(newShipDto.y(), newShipDto.x() + i))
+                .map(i -> new Position(newShipDto.y()  + (!offsetX ? i : 0), newShipDto.x() + (offsetX ? i : 0)))
                 .toList();
     }
 

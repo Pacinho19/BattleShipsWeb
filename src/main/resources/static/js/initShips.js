@@ -1,6 +1,7 @@
 var manuallyInitialization = false;
 var nextShip;
 var selectedCells = [];
+var shipType = 'VERTICAL';
 
 var stompClient = null;
 var privateStompClient = null;
@@ -84,7 +85,7 @@ var boardCellClickFunction = function() {
     xhr.setRequestHeader("Content-Type", "application/json");
 
     pos = selectedCells[0].id.split('_');
-    let shipObj = {x:pos[0], y:pos[1], mastsCount:nextShip};
+    let shipObj = {x:pos[0], y:pos[1], mastsCount:nextShip, shipType: shipType};
     var data = JSON.stringify(shipObj);
     xhr.send(data);
 };
@@ -121,8 +122,11 @@ var boarCellMouseoverFunction = function(){
 };
 
 function getNextCellElement(offset, baseId){
+    offsetX = shipType=='HORIZONTAL' ? offset : 0;
+    offsetY = shipType=='VERTICAL' ? offset : 0;
+
     pos = baseId.split('_');
-    newId = (parseInt(pos[0]) + offset) + '_' + (parseInt(pos[1]));
+    newId = (parseInt(pos[0]) + offsetX) + '_' + (parseInt(pos[1]) + offsetY);
     return document.getElementById(newId);
 }
 
