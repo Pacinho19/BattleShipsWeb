@@ -1,0 +1,30 @@
+<div th:fragment="boardFrag" id="board" style="width:100%;height:100%" xmlns:th="http://www.w3.org/1999/xhtml">
+    <table class="center" style="width:100%;height:80%;margin-top:1%">
+        <tr th:each="row,iter : ${game.playerBoard}" style="width:100%">
+            <td th:each="col,iter2 : ${row}">
+                <div th:id="${iter2.index+'_'+iter.index}"
+                     th:style="${'background-color:' + (col.ship==null ? '#43b5d5' : 'black') + ';border: 1px solid;width:100%;height:100%'}"></div>
+            </td>
+        <tr>
+    </table>
+    <div style="width:100%;text-align:center;margin-top:1%" th:if="${!game.playerReady}">
+        <div class="row" >
+            <div class="col-md-6">
+                <button class="btn btn-primary" style="margin: auto;width:90%" onclick="generateRandomShipsBoard()">
+                    Generate Random board
+                </button>
+            </div>
+            <div class="col-md-6">
+                <button class="btn btn-info" style="margin: auto;width:90%" onclick="manuallyInit()">
+                    Manually init
+                </button>
+            </div>
+        </div>
+        <div  style="width:100%;margin-top:1%">
+            <button type="submit" class="btn btn-success" style="margin:auto;width:90%" onclick="startGame()">Start Game</button>
+        </div>
+    </div>
+    <div style="width:100%;text-align:center;margin-top:1%" th:if="${game.playerReady}">
+        <h3 style="width:100%;text-align:center">Waiting for oponent!</h3>
+    </div>
+</div>

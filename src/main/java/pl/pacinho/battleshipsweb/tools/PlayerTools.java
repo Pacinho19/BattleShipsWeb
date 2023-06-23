@@ -39,12 +39,8 @@ public class PlayerTools {
     }
 
     public static Integer getPlayerIndex(Game game, String name) {
-        return game.getPlayers()
-                .stream()
-                .filter(p -> p.getName().equals(name))
-                .findFirst()
-                .map(Player::getIndex)
-                .orElseThrow(() -> new IllegalArgumentException("Unknown player: " + name));
+        return getPlayerByName(name, game)
+                .getIndex();
     }
 
     public static String getOponentName(String name, Game game) {
@@ -60,5 +56,28 @@ public class PlayerTools {
         return game.getPlayers()
                 .get(game.getActualPlayer() - 1)
                 .isCPU();
+    }
+
+    public static Player getPlayerByName(String playerName, Game game) {
+        return game.getPlayers()
+                .stream()
+                .filter(p -> p.getName().equals(playerName))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Cannot find oponent name for player " + playerName + " in game " + game.getId()));
+    }
+
+    public static boolean allPlayersAreReady(LinkedList<Player> players) {
+        return players.stream()
+                .allMatch(Player::isReady);
+    }
+
+    public static boolean isPlayerReady(Game game, String name) {
+        try {
+            return getPlayerByName(name, game)
+                    .isReady();
+        } catch (Exception ex) {
+            //Empty
+        }
+        return false;
     }
 }

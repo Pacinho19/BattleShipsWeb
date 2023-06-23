@@ -33,7 +33,7 @@ public class GameController {
     @PostMapping(UIConfig.NEW_GAME)
     public String newGame(Model model, Authentication authentication, @RequestParam("gameType") GameType gameType) {
         try {
-            return "redirect:" + UIConfig.GAMES + "/" + gameService.newGame(authentication.getName(), gameType) + (gameType==GameType.PLAYER ? "/room" : "");
+            return "redirect:" + UIConfig.GAMES + "/" + gameService.newGame(authentication.getName(), gameType) + (gameType == GameType.PLAYER ? "/room" : "");
         } catch (Exception e) {
             model.addAttribute("error", e.getMessage());
             return gameHome(model);
@@ -44,7 +44,10 @@ public class GameController {
     public String gameRoom(@PathVariable(value = "gameId") String gameId, Model model, Authentication authentication) {
         try {
             GameDto game = gameService.findDtoById(gameId, authentication.getName());
-            if (game.getStatus() == GameStatus.IN_PROGRESS) return "redirect:" + UIConfig.GAMES + "/" + gameId;
+            if (game.getStatus() == GameStatus.INIT_SHIPS)
+                return "redirect:" + UIConfig.GAMES + "/" + gameId + "/init-ships";
+            if (game.getStatus() == GameStatus.IN_PROGRESS)
+                return "redirect:" + UIConfig.GAMES + "/" + gameId;
             if (game.getStatus() == GameStatus.FINISHED)
                 throw new IllegalStateException("Game " + gameId + " finished!");
 
@@ -61,11 +64,15 @@ public class GameController {
     public String gamePage(@PathVariable(value = "gameId") String gameId,
                            Model model,
                            Authentication authentication) {
-        model.addAttribute("game", gameService.findDtoById(gameId, authentication.getName()));
+        GameDto gameDto = gameService.findDtoById(gameId, authentication.getName());
+        model.addAttribute("game", gameDto);
+
+        if (gameDto.getStatus() == GameStatus.INIT_SHIPS)
+            return "redirect:" + UIConfig.GAMES + "/" + gameId + "/init-ships";
         return "game";
     }
 
-    @PostMapping(UIConfig.PLAYERS)
+    @PostMapping(UIConfig.GAME_PLAYERS)
     public String players(@PathVariable(value = "gameId") String gameId,
                           Model model,
                           Authentication authentication) {
@@ -83,10 +90,39 @@ public class GameController {
     }
 
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    @PostMapping(UIConfig.shot)
+    @PostMapping(UIConfig.GAME_SHOT)
     public void shot(Authentication authentication,
                      @RequestBody ShotDto shotDto,
                      @PathVariable(value = "gameId") String gameId) {
         gameService.shot(authentication.getName(), gameId, shotDto);
     }
+
+    @GetMapping(UIConfig.GAME_INIT_SHIPS)
+    public String initShipsPage(@PathVariable(value = "gameId") String gameId,
+                                Model model,
+                                Authentication authentication) {
+        GameDto gameDto = gameService.findDtoById(gameId, authentication.getName());
+        model.addAttribute("game", gameDto);
+        if (gameDto.getStatus() == GameStatus.IN_PROGRESS)
+            return "redirect:" + UIConfig.GAMES + "/" + gameDto.getId();
+
+        return "init-ships";
+    }
+
+    @PostMapping(UIConfig.GAME_INIT_SHIPS_GENERATE_RANDOM_BOARD)
+    public String initShipsGenerateRandomBoard(@PathVariable(value = "gameId") String gameId,
+                                               Model model,
+                                               Authentication authentication) {
+        GameDto gameDto = gameService.generateRandomBoard(authentication.getName(), gameId);
+        model.addAttribute("game", gameDto);
+        return "fragments/init-ships-board :: boardFrag";
+    }
+
+    @PostMapping(UIConfig.START_GAME)
+    public String startGame(@PathVariable(value = "gameId") String gameId, Authentication authentication, Model model) {
+        gameService.startGame(gameId, authentication.getName());
+        model.addAttribute("game", gameService.findDtoById(gameId, authentication.getName()));
+        return "fragments/init-ships-board :: boardFrag";
+    }
+
 }

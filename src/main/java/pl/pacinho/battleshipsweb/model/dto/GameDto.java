@@ -24,6 +24,7 @@ public class GameDto {
     private Cell[][] playerBoard;
     private Cell[][] shotingBoard;
     private GameInfo gameInfoDto;
+    private boolean playerReady;
 
     public int getOpponentIndex() {
         if (playerIndex == players.size())

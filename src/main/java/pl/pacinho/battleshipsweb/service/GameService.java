@@ -10,9 +10,11 @@ import pl.pacinho.battleshipsweb.model.dto.ShotAnimationDto;
 import pl.pacinho.battleshipsweb.model.dto.ShotDto;
 import pl.pacinho.battleshipsweb.model.dto.mapper.GameDtoMapper;
 import pl.pacinho.battleshipsweb.model.entity.Game;
+import pl.pacinho.battleshipsweb.model.entity.Player;
 import pl.pacinho.battleshipsweb.model.enums.GameStatus;
 import pl.pacinho.battleshipsweb.model.enums.GameType;
 import pl.pacinho.battleshipsweb.repository.GameRepository;
+import pl.pacinho.battleshipsweb.tools.BattleShipsTools;
 import pl.pacinho.battleshipsweb.tools.CpuGun;
 import pl.pacinho.battleshipsweb.tools.PlayerTools;
 import pl.pacinho.battleshipsweb.utils.SleepUtils;
@@ -51,7 +53,7 @@ public class GameService {
 
     public void joinGame(String name, String gameId, boolean isCPU) throws IllegalStateException {
         Game game = gameRepository.joinGame(name, gameId, isCPU);
-        if (game.getPlayers().size() == GameConfig.PLAYERS_COUNT) game.setStatus(GameStatus.IN_PROGRESS);
+        if (game.getPlayers().size() == GameConfig.PLAYERS_COUNT) game.setStatus(GameStatus.INIT_SHIPS);
     }
 
     public boolean canJoin(GameDto game, String name) {
@@ -97,5 +99,23 @@ public class GameService {
 
     private void finishRound(Game game, ReloadBoardDto info) {
         simpMessagingTemplate.convertAndSend("/reload-board/" + game.getId(), info);
+    }
+
+    public GameDto generateRandomBoard(String playerName, String gameId) {
+        Game game = gameLogicService.findById(gameId);
+        Player player = PlayerTools.getPlayerByName(playerName, game);
+        player.setPlayerShipsBoard(BattleShipsTools.initShipsBoard());
+        return GameDtoMapper.parse(game, playerName);
+    }
+
+    public void startGame(String gameId, String name) {
+        //TODO Players ships board generator
+        Game game = gameLogicService.findById(gameId);
+        Player player = PlayerTools.getPlayerByName(name, game);
+        player.setReady(true);
+        if (PlayerTools.allPlayersAreReady(game.getPlayers())) {
+            game.setStatus(GameStatus.IN_PROGRESS);
+            simpMessagingTemplate.convertAndSend("/start-game/" + game.getId(), "");
+        }
     }
 }
