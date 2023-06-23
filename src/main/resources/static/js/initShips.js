@@ -144,3 +144,9 @@ function addClickListeners(){
             element.addEventListener("mouseover", boarCellMouseoverFunction);
       });
 }
+
+document.addEventListener('keyup', (e) => {
+  if (e.keyCode === 82){
+    shipType = shipType=='HORIZONTAL' ?  'VERTICAL' : 'HORIZONTAL' ;
+  }
+});
