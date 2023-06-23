@@ -1,6 +1,7 @@
 package pl.pacinho.battleshipsweb.tools;
 
 import pl.pacinho.battleshipsweb.config.GameConfig;
+import pl.pacinho.battleshipsweb.model.dto.NewShipDto;
 import pl.pacinho.battleshipsweb.model.dto.Position;
 import pl.pacinho.battleshipsweb.model.dto.ShotDto;
 import pl.pacinho.battleshipsweb.model.entity.Cell;
@@ -131,8 +132,11 @@ public class BattleShipsTools {
     }
 
     private static void hitCell(Cell[][] cells, Position p) {
+        if (cells == null)
+            return;
+
         Cell cell = cells[p.x()][p.y()];
-        if (cell.getHit() == null)
+        if (cell.getHit() == null && cell.getShip() == null)
             cell.setHit(false);
     }
 
@@ -166,4 +170,31 @@ public class BattleShipsTools {
                 .reduce(0L, Long::sum) == 0;
     }
 
+    public static int getMaxShipCountByMasts(Integer mastsCount) {
+        return GameConfig.MAX_MASTS_COUNT - mastsCount + 1;
+    }
+
+    public static void placeShip(Cell[][] playerShipsBoard, NewShipDto newShipDto) {
+        Ship ship = new Ship();
+
+        List<Position> shipPositions = getNewShipPositions(newShipDto);
+        ship.setMasts(shipPositions);
+        shipPositions.forEach(p -> playerShipsBoard[p.x()][p.y()].setShip(ship));
+
+        hitNeighboursForDrownedShip(ship, null, playerShipsBoard);
+    }
+
+    private static List<Position> getNewShipPositions(NewShipDto newShipDto) {
+        return IntStream.range(0, newShipDto.mastsCount())
+                .boxed()
+                .map(i -> new Position(newShipDto.y(), newShipDto.x() + i))
+                .toList();
+    }
+
+    public static void clearHits(Cell[][] playerShipsBoard) {
+        Arrays.stream(playerShipsBoard)
+                .flatMap(Arrays::stream)
+                .forEach(c -> c.setHit(null));
+
+    }
 }

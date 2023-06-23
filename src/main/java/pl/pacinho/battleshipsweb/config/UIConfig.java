@@ -8,6 +8,8 @@ public class UIConfig {
     public static final String GAME_ROOM = GAME_PAGE + "/room";
     public static final String START_GAME = GAME_PAGE + "/start-game";
     public static final String GAME_INIT_SHIPS = GAME_PAGE + "/init-ships";
+    public static final String GAME_INIT_SHIPS_PLACE_SHIPS = GAME_INIT_SHIPS + "/place";
+    public static final String GAME_INIT_SHIPS_CLEAR_BOARD = GAME_INIT_SHIPS + "/clear-board";
     public static final String GAME_INIT_SHIPS_GENERATE_RANDOM_BOARD = GAME_INIT_SHIPS + "/generate-random-board";
     public static final String GAME_SHOT = GAME_PAGE + "/shot";
     public static final String GAME_PLAYERS = GAME_ROOM + "/players";

@@ -3,6 +3,7 @@ package pl.pacinho.battleshipsweb.model.dto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 import pl.pacinho.battleshipsweb.model.entity.Cell;
 import pl.pacinho.battleshipsweb.model.entity.GameInfo;
 import pl.pacinho.battleshipsweb.model.enums.GameStatus;
@@ -25,10 +26,14 @@ public class GameDto {
     private Cell[][] shotingBoard;
     private GameInfo gameInfoDto;
     private boolean playerReady;
+    private int maxShipMastsCount;
+
+    private int nextShipManuallyInit;
+    private boolean shipsManuallyInit;
 
     public int getOpponentIndex() {
         if (playerIndex == players.size())
             return 1;
-        return playerIndex+1;
+        return playerIndex + 1;
     }
 }

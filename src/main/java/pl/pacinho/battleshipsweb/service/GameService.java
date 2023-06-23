@@ -4,13 +4,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import pl.pacinho.battleshipsweb.config.GameConfig;
-import pl.pacinho.battleshipsweb.model.dto.GameDto;
-import pl.pacinho.battleshipsweb.model.dto.ReloadBoardDto;
-import pl.pacinho.battleshipsweb.model.dto.ShotAnimationDto;
-import pl.pacinho.battleshipsweb.model.dto.ShotDto;
+import pl.pacinho.battleshipsweb.model.dto.*;
 import pl.pacinho.battleshipsweb.model.dto.mapper.GameDtoMapper;
 import pl.pacinho.battleshipsweb.model.entity.Game;
 import pl.pacinho.battleshipsweb.model.entity.Player;
+import pl.pacinho.battleshipsweb.model.entity.Ship;
 import pl.pacinho.battleshipsweb.model.enums.GameStatus;
 import pl.pacinho.battleshipsweb.model.enums.GameType;
 import pl.pacinho.battleshipsweb.repository.GameRepository;
@@ -109,13 +107,33 @@ public class GameService {
     }
 
     public void startGame(String gameId, String name) {
-        //TODO Players ships board generator
+        //TODO Players ships board validator
+
         Game game = gameLogicService.findById(gameId);
         Player player = PlayerTools.getPlayerByName(name, game);
         player.setReady(true);
+        BattleShipsTools.clearHits(player.getPlayerShipsBoard());
         if (PlayerTools.allPlayersAreReady(game.getPlayers())) {
             game.setStatus(GameStatus.IN_PROGRESS);
             simpMessagingTemplate.convertAndSend("/start-game/" + game.getId(), "");
         }
+    }
+
+    public GameDto clearBoard(String name, String gameId) {
+        Game game = gameLogicService.findById(gameId);
+        game.setShipsManuallyInit(true);
+
+        Player player = PlayerTools.getPlayerByName(name, game);
+        player.setPlayerShipsBoard(BattleShipsTools.initFreeBoard());
+        return GameDtoMapper.parse(game, name);
+    }
+
+    public GameDto placeShip(String name, String gameId, NewShipDto newShipDto) {
+        Game game = gameLogicService.findById(gameId);
+        game.setShipsManuallyInit(true);
+
+        Player player = PlayerTools.getPlayerByName(name, game);
+        BattleShipsTools.placeShip(player.getPlayerShipsBoard(), newShipDto);
+        return findDtoById(gameId, name);
     }
 }

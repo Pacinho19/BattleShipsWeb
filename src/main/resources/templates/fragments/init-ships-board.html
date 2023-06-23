@@ -1,9 +1,13 @@
 <div th:fragment="boardFrag" id="board" style="width:100%;height:100%" xmlns:th="http://www.w3.org/1999/xhtml">
-    <table class="center" style="width:100%;height:80%;margin-top:1%">
+
+    <input type="hidden" id="nextShipManuallyInit" th:value="${game.nextShipManuallyInit}">
+    <input type="hidden" id="shipsManuallyInit" th:value="${game.shipsManuallyInit}">
+
+    <table id="ships-board" class="center" style="width:100%;height:80%;margin-top:1%">
         <tr th:each="row,iter : ${game.playerBoard}" style="width:100%">
-            <td th:each="col,iter2 : ${row}">
-                <div th:id="${iter2.index+'_'+iter.index}"
-                     th:style="${'background-color:' + (col.ship==null ? '#43b5d5' : 'black') + ';border: 1px solid;width:100%;height:100%'}"></div>
+            <td th:each="col,iter2 : ${row}"  th:id="${'td_' + iter2.index+'_'+iter.index}"  >
+                <div class="boardCell" th:id="${iter2.index+'_'+iter.index}" data-th-attr="data-free-cell=${col.ship==null && col.hit==null}"
+                     th:style="${'background-color:' + (col.ship==null && col.hit==null ? '#43b5d5' : (col.hit!=null ? 'red' : 'black')) + ';border: 1px solid;width:100%;height:100%'}"></div>
             </td>
         <tr>
     </table>

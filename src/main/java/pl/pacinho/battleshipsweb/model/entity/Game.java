@@ -21,6 +21,8 @@ public class Game {
     private LocalDateTime startTime;
     private GameInfo gameInfoDto;
     private GameType gameType;
+    @Setter
+    private boolean shipsManuallyInit;
 
     public Game(String player1, GameType gameType) {
         players = new LinkedList<>();
@@ -33,6 +35,8 @@ public class Game {
         this.actualPlayer = 1;
         this.gameInfoDto = new GameInfo();
         gameInfoDto.addPlayer(player);
+
+        this.shipsManuallyInit = false;
     }
 
 }

@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import pl.pacinho.battleshipsweb.config.UIConfig;
 import pl.pacinho.battleshipsweb.model.dto.GameDto;
+import pl.pacinho.battleshipsweb.model.dto.NewShipDto;
 import pl.pacinho.battleshipsweb.model.dto.ShotDto;
 import pl.pacinho.battleshipsweb.model.enums.GameStatus;
 import pl.pacinho.battleshipsweb.model.enums.GameType;
@@ -122,6 +123,20 @@ public class GameController {
     public String startGame(@PathVariable(value = "gameId") String gameId, Authentication authentication, Model model) {
         gameService.startGame(gameId, authentication.getName());
         model.addAttribute("game", gameService.findDtoById(gameId, authentication.getName()));
+        return "fragments/init-ships-board :: boardFrag";
+    }
+
+    @PostMapping(UIConfig.GAME_INIT_SHIPS_CLEAR_BOARD)
+    public String clearInitShipsBoard(@PathVariable(value = "gameId") String gameId, Authentication authentication, Model model) {
+        GameDto gameDto = gameService.clearBoard(authentication.getName(), gameId);
+        model.addAttribute("game", gameDto);
+        return "fragments/init-ships-board :: boardFrag";
+    }
+
+    @PostMapping(UIConfig.GAME_INIT_SHIPS_PLACE_SHIPS)
+    public String placeShip(@PathVariable(value = "gameId") String gameId, Authentication authentication, Model model, @RequestBody NewShipDto newShipDto) {
+        GameDto gameDto = gameService.placeShip(authentication.getName(), gameId, newShipDto);
+        model.addAttribute("game", gameDto);
         return "fragments/init-ships-board :: boardFrag";
     }
 

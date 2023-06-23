@@ -1,5 +1,6 @@
 package pl.pacinho.battleshipsweb.model.dto.mapper;
 
+import pl.pacinho.battleshipsweb.config.GameConfig;
 import pl.pacinho.battleshipsweb.model.dto.GameDto;
 import pl.pacinho.battleshipsweb.model.entity.Game;
 import pl.pacinho.battleshipsweb.model.entity.Player;
@@ -24,6 +25,9 @@ public class GameDtoMapper {
                 .shotingBoard(PlayerTools.getPlayerShootingBoard(game.getPlayers(), name))
                 .gameInfoDto(game.getGameInfoDto())
                 .playerReady(game.getStatus() == GameStatus.INIT_SHIPS && PlayerTools.isPlayerReady(game, name))
+                .maxShipMastsCount(GameConfig.MAX_MASTS_COUNT)
+                .nextShipManuallyInit(PlayerTools.getNextShipManuallyInit(game, name))
+                .shipsManuallyInit(game.isShipsManuallyInit())
                 .build();
     }
 
