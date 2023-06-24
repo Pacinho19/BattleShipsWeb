@@ -90,7 +90,13 @@ var boardCellClickFunction = function() {
     xhr.send(data);
 };
 
+var lastCell;
 var boarCellMouseoverFunction = function(){
+    lastCell = this;
+    moveFunction();
+}
+
+function moveFunction(){
     if(selectedCells.length>0){
         selectedCells.forEach(lastCellObj => {
           lastCellElement = document.getElementById(lastCellObj.id);
@@ -102,7 +108,7 @@ var boarCellMouseoverFunction = function(){
 
     toSelect = [];
     for(let i=0;i<nextShip;i++){
-        element = getNextCellElement(i, this.id);
+        element = getNextCellElement(i, lastCell.id);
         if(element==null)
             return;
 
@@ -119,7 +125,8 @@ var boarCellMouseoverFunction = function(){
         selectedCells.push({id: element.id, backColor: element.style.backgroundColor})
         element.style.backgroundColor = 'yellow';
     });
-};
+
+}
 
 function getNextCellElement(offset, baseId){
     offsetX = shipType=='HORIZONTAL' ? offset : 0;
@@ -135,10 +142,8 @@ function addClickListeners(){
        Array.from(elements).forEach(function(element) {
 
                isFreeCell = element.getAttribute("data-free-cell") == 'true';
-               if(!isFreeCell){
-                    console.log("element " + element + " is not free");
+               if(!isFreeCell)
                     return;
-               }
 
             element.addEventListener("click", boardCellClickFunction);
             element.addEventListener("mouseover", boarCellMouseoverFunction);
@@ -146,7 +151,8 @@ function addClickListeners(){
 }
 
 document.addEventListener('keyup', (e) => {
-  if (e.keyCode === 82){
-    shipType = shipType=='HORIZONTAL' ?  'VERTICAL' : 'HORIZONTAL' ;
-  }
+    if (e.keyCode === 82){
+        shipType = shipType=='HORIZONTAL' ?  'VERTICAL' : 'HORIZONTAL' ;
+        moveFunction();
+    }
 });
