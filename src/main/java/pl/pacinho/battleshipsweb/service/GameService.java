@@ -73,7 +73,7 @@ public class GameService {
         if (game.getStatus() == GameStatus.FINISHED)
             throw new IllegalStateException("Game " + game.getId() + " finished!");
 
-        if (game.getStatus() != GameStatus.IN_PROGRESS)
+        if (game.getStatus() != GameStatus.IN_PROGRESS && game.getStatus() != GameStatus.INIT_SHIPS)
             throw new IllegalStateException("Game " + game.getId() + " not started!");
 
         if (!checkPlayGame(name, game))
@@ -146,5 +146,10 @@ public class GameService {
         Player player = PlayerTools.getPlayerByName(name, game);
         BattleShipsTools.undo(player.getShipPlacedManually(), player.getPlayerShipsBoard());
         return findDtoById(gameId, name);
+    }
+
+    public void checkInitShipsPage(GameDto game, String name) {
+        if (!checkPlayGame(name, game))
+            throw new IllegalStateException("Game " + game.getId() + " in progress! You can't open game page!");
     }
 }

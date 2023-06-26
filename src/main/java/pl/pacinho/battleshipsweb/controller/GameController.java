@@ -65,11 +65,20 @@ public class GameController {
     public String gamePage(@PathVariable(value = "gameId") String gameId,
                            Model model,
                            Authentication authentication) {
-        GameDto gameDto = gameService.findDtoById(gameId, authentication.getName());
-        model.addAttribute("game", gameDto);
 
-        if (gameDto.getStatus() == GameStatus.INIT_SHIPS)
-            return "redirect:" + UIConfig.GAMES + "/" + gameId + "/init-ships";
+        try {
+            GameDto gameDto = gameService.findDtoById(gameId, authentication.getName());
+            gameService.checkGamePage(gameDto, authentication.getName());
+
+            model.addAttribute("game", gameDto);
+
+            if (gameDto.getStatus() == GameStatus.INIT_SHIPS)
+                return "redirect:" + UIConfig.GAMES + "/" + gameId + "/init-ships";
+        } catch (Exception e) {
+            model.addAttribute("error", e.getMessage());
+            return gameHome(model);
+        }
+
         return "game";
     }
 
@@ -102,10 +111,18 @@ public class GameController {
     public String initShipsPage(@PathVariable(value = "gameId") String gameId,
                                 Model model,
                                 Authentication authentication) {
-        GameDto gameDto = gameService.findDtoById(gameId, authentication.getName());
-        model.addAttribute("game", gameDto);
-        if (gameDto.getStatus() == GameStatus.IN_PROGRESS)
-            return "redirect:" + UIConfig.GAMES + "/" + gameDto.getId();
+        try {
+            GameDto gameDto = gameService.findDtoById(gameId, authentication.getName());
+            gameService.checkInitShipsPage(gameDto, authentication.getName());
+
+            model.addAttribute("game", gameDto);
+            if (gameDto.getStatus() == GameStatus.IN_PROGRESS)
+                return "redirect:" + UIConfig.GAMES + "/" + gameDto.getId();
+
+        } catch (Exception e) {
+            model.addAttribute("error", e.getMessage());
+            return gameHome(model);
+        }
 
         return "init-ships";
     }
