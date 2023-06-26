@@ -33,21 +33,6 @@ public class BattleShipsTools {
         for (int i = GameConfig.MAX_MASTS_COUNT; i > 0; i--) {
             for (int j = 0; j < GameConfig.MAX_MASTS_COUNT - i + 1; j++) {
                 Ship ship = new Ship();
-
-                System.out.println("TO place: " + i);
-                System.out.println("Current Board:");
-
-                for (int x = 0; x < cells.length; x++) {
-                    for (int z = 0; z < cells[i].length; z++) {
-                        Cell cell = cells[x][z];
-                        if (cell.getShip() == null)
-                            System.out.print("*");
-                        else
-                            System.out.print(cell.getShip().getMasts().size());
-                    }
-                    System.out.print("\n");
-                }
-
                 List<Position> shipPositions = generateShips(i, availableCells);
                 removeFromAvailableCells(shipPositions, availableCells);
                 ship.setMasts(shipPositions);
