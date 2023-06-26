@@ -101,6 +101,7 @@ public class GameService {
 
     public GameDto generateRandomBoard(String playerName, String gameId) {
         Game game = gameLogicService.findById(gameId);
+        game.setShipsManuallyInit(false);
         Player player = PlayerTools.getPlayerByName(playerName, game);
         player.setPlayerShipsBoard(BattleShipsTools.initShipsBoard());
         return GameDtoMapper.parse(game, playerName);
@@ -133,7 +134,17 @@ public class GameService {
         game.setShipsManuallyInit(true);
 
         Player player = PlayerTools.getPlayerByName(name, game);
-        BattleShipsTools.placeShip(player.getPlayerShipsBoard(), newShipDto);
+        Ship ship = BattleShipsTools.placeShip(player.getPlayerShipsBoard(), newShipDto);
+        player.setLastShipPlacedManually(ship);
+
+        return findDtoById(gameId, name);
+    }
+
+    public GameDto undo(String name, String gameId) {
+        Game game = gameLogicService.findById(gameId);
+        game.setShipsManuallyInit(true);
+        Player player = PlayerTools.getPlayerByName(name, game);
+        BattleShipsTools.undo(player.getLastShipPlacedManually(), player.getPlayerShipsBoard());
         return findDtoById(gameId, name);
     }
 }

@@ -18,6 +18,9 @@ public class Player {
     @Setter
     private boolean ready;
 
+    @Setter
+    private Ship lastShipPlacedManually;
+
     public Player(String name, int index, boolean CPU) {
         this.CPU = CPU;
         this.ready = CPU;

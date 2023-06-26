@@ -2,6 +2,7 @@ package pl.pacinho.battleshipsweb.tools;
 
 import pl.pacinho.battleshipsweb.config.GameConfig;
 import pl.pacinho.battleshipsweb.model.dto.Position;
+import pl.pacinho.battleshipsweb.model.entity.Cell;
 import pl.pacinho.battleshipsweb.model.enums.Direction;
 
 import java.util.Arrays;
@@ -58,5 +59,14 @@ public class NeighboursTools {
 
     public static boolean checkAllNeighboursIsAvailable(List<Position> available, List<Position> neighbours) {
         return new HashSet<>(available).containsAll(neighbours);
+    }
+
+    public static boolean isNeighbourForAnyShip(Position pos, Cell[][] playerShipsBoard) {
+        return Arrays.stream(playerShipsBoard)
+                .flatMap(Arrays::stream)
+                .filter(c -> c.getShip() != null)
+                .anyMatch(c -> NeighboursTools.getNeighbours(new Position(c.getX(), c.getY()))
+                        .stream()
+                        .anyMatch(pos1 -> pos1.x() == pos.x() && pos1.y() == pos.y()));
     }
 }

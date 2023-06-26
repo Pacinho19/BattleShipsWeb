@@ -154,5 +154,20 @@ document.addEventListener('keyup', (e) => {
     if (e.keyCode === 82){
         shipType = shipType=='HORIZONTAL' ?  'VERTICAL' : 'HORIZONTAL' ;
         moveFunction();
+    }else if(e.keyCode === 85){
+        undo();
     }
 });
+
+function undo(){
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState == XMLHttpRequest.DONE) {
+            $("#board").replaceWith(xhr.responseText);
+            manuallyInitPart2();
+        }
+    }
+    xhr.open('POST', "/battle-ships/games/"+ document.getElementById("gameId").value +"/init-ships/undo", true);
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.send();
+}

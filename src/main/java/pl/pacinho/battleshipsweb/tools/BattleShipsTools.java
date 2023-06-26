@@ -174,21 +174,21 @@ public class BattleShipsTools {
         return GameConfig.MAX_MASTS_COUNT - mastsCount + 1;
     }
 
-    public static void placeShip(Cell[][] playerShipsBoard, NewShipDto newShipDto) {
+    public static Ship placeShip(Cell[][] playerShipsBoard, NewShipDto newShipDto) {
         Ship ship = new Ship();
 
         List<Position> shipPositions = getNewShipPositions(newShipDto);
         ship.setMasts(shipPositions);
         shipPositions.forEach(p -> playerShipsBoard[p.x()][p.y()].setShip(ship));
-
         hitNeighboursForDrownedShip(ship, null, playerShipsBoard);
+        return ship;
     }
 
     private static List<Position> getNewShipPositions(NewShipDto newShipDto) {
         final boolean offsetX = newShipDto.shipType() == ShipType.HORIZONTAL;
         return IntStream.range(0, newShipDto.mastsCount())
                 .boxed()
-                .map(i -> new Position(newShipDto.y()  + (!offsetX ? i : 0), newShipDto.x() + (offsetX ? i : 0)))
+                .map(i -> new Position(newShipDto.y() + (!offsetX ? i : 0), newShipDto.x() + (offsetX ? i : 0)))
                 .toList();
     }
 
@@ -197,5 +197,30 @@ public class BattleShipsTools {
                 .flatMap(Arrays::stream)
                 .forEach(c -> c.setHit(null));
 
+    }
+
+    public static void undo(Ship lastShip, Cell[][] playerShipsBoard) {
+        if (lastShip == null)
+            return;
+
+        List<Position> allNeighbors = new ArrayList<>();
+
+        Arrays.stream(playerShipsBoard)
+                .flatMap(Arrays::stream)
+                .filter(c -> c.getShip() == lastShip)
+                .forEach(c -> {
+                    allNeighbors.addAll(NeighboursTools.getNeighbours(new Position(c.getX(), c.getY())));
+                    c.setShip(null);
+                    c.setHit(null);
+                });
+
+        allNeighbors
+                .forEach(pos -> {
+                    if (NeighboursTools.isNeighbourForAnyShip(pos, playerShipsBoard))
+                        return;
+                    Cell cell = playerShipsBoard[pos.y()][pos.x()];
+                    cell.setShip(null);
+                    cell.setHit(null);
+                });
     }
 }

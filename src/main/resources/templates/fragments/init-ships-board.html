@@ -3,32 +3,61 @@
     <input type="hidden" id="nextShipManuallyInit" th:value="${game.nextShipManuallyInit}">
     <input type="hidden" id="shipsManuallyInit" th:value="${game.shipsManuallyInit}">
 
-    <table id="ships-board" class="center" style="width:100%;height:80%;margin-top:1%">
-        <tr th:each="row,iter : ${game.playerBoard}" style="width:100%">
-            <td th:each="col,iter2 : ${row}"  th:id="${'td_' + iter2.index+'_'+iter.index}"  >
-                <div class="boardCell" th:id="${iter2.index+'_'+iter.index}" data-th-attr="data-free-cell=${col.ship==null && col.hit==null}"
-                     th:style="${'background-color:' + (col.ship==null && col.hit==null ? '#43b5d5' : (col.hit!=null ? 'red' : 'black')) + ';border: 1px solid;width:100%;height:100%'}"></div>
-            </td>
-        <tr>
-    </table>
-    <div style="width:100%;text-align:center;margin-top:1%" th:if="${!game.playerReady}">
-        <div class="row" >
-            <div class="col-md-6">
-                <button class="btn btn-primary" style="margin: auto;width:90%" onclick="generateRandomShipsBoard()">
-                    Generate Random board
-                </button>
-            </div>
-            <div class="col-md-6">
-                <button class="btn btn-info" style="margin: auto;width:90%" onclick="manuallyInit()">
-                    Manually init
-                </button>
-            </div>
-        </div>
-        <div  style="width:100%;margin-top:1%">
-            <button type="submit" class="btn btn-success" style="margin:auto;width:90%" onclick="startGame()">Start Game</button>
-        </div>
+    <div class="row" style="height:10%">
+        <h3 style="width:100%;text-align:center">Init your ships board</h3>
     </div>
-    <div style="width:100%;text-align:center;margin-top:1%" th:if="${game.playerReady}">
-        <h3 style="width:100%;text-align:center">Waiting for oponent!</h3>
+
+    <div class="row" style="height:90%">
+        <div class="row" style="width:100%">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+                <table id="ships-board" class="center" style="width:100%;height:80%;margin-top:1%">
+                    <tr th:each="row,iter : ${game.playerBoard}" style="width:100%">
+                        <td th:each="col,iter2 : ${row}" th:id="${'td_' + iter2.index+'_'+iter.index}">
+                            <div class="boardCell" th:id="${iter2.index+'_'+iter.index}"
+                                 data-th-attr="data-free-cell=${col.ship==null && col.hit==null}"
+                                 th:style="${'background-color:' + (col.ship==null && col.hit==null ? '#43b5d5' : (col.hit!=null ? 'red' : 'black')) + ';border: 1px solid;width:100%;height:100%'}"></div>
+                        </td>
+                    <tr>
+                </table>
+
+                <div style="width:100%;text-align:center;margin-top:1%" th:if="${!game.playerReady}">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <button class="btn btn-primary" style="margin: auto;width:90%"
+                                    onclick="generateRandomShipsBoard()">
+                                Generate Random board
+                            </button>
+                        </div>
+                        <div class="col-md-6">
+                            <button class="btn btn-info" style="margin: auto;width:90%" onclick="manuallyInit()">
+                                Manually init
+                            </button>
+                        </div>
+                    </div>
+                    <div style="width:100%;margin-top:1%">
+                        <button type="submit" class="btn btn-success" style="margin:auto;width:90%"
+                                onclick="startGame()" th:if="${(game.shipsManuallyInit && game.nextShipManuallyInit==0) || !game.shipsManuallyInit}">Start
+                            Game
+                        </button>
+                    </div>
+                </div>
+                <div style="width:100%;text-align:center;margin-top:1%" th:if="${game.playerReady}">
+                    <h3 style="width:100%;text-align:center">Waiting for oponent!</h3>
+                </div>
+
+            </div>
+            <div class="col-md-2">
+                <div th:if="${game.shipsManuallyInit}">
+                    <div class="row" style="margin-top:4%">
+                        <span class="badge badge-warning" style="width:5vw;text-align:center">R</span> - Switch Ship
+                        Orientation
+                    </div>
+                    <div class="row" style="margin-top:1%">
+                        <span class="badge badge-danger" style="width:5vw;text-align:center">U</span> - Undo Last Ship
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

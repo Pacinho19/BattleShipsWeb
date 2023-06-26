@@ -140,4 +140,11 @@ public class GameController {
         return "fragments/init-ships-board :: boardFrag";
     }
 
+    @PostMapping(UIConfig.GAME_INIT_SHIPS_UNDO)
+    public String undo(@PathVariable(value = "gameId") String gameId, Authentication authentication, Model model) {
+        GameDto gameDto = gameService.undo(authentication.getName(), gameId);
+        model.addAttribute("game", gameDto);
+        return "fragments/init-ships-board :: boardFrag";
+    }
+
 }
