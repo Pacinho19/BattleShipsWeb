@@ -95,8 +95,9 @@ public class BattleShipsTools {
             if (shipPositions1.isEmpty())
                 shipPositions1 = getShipPositions(mastsCunt, availableCells, startPosition, shipType == ShipType.HORIZONTAL ? ShipType.VERTICAL : ShipType.HORIZONTAL);
 
-            if (!shipPositions1.isEmpty()) {
-                shipPositions.addAll(shipPositions1);
+            shipPositions.addAll(shipPositions1);
+
+            if (shipPositions.size() == mastsCunt) {
                 return shipPositions;
             } else {
                 availableCellsCopy.remove(startPosition);
