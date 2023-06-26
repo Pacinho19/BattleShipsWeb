@@ -199,11 +199,13 @@ public class BattleShipsTools {
 
     }
 
-    public static void undo(Ship lastShip, Cell[][] playerShipsBoard) {
-        if (lastShip == null)
+    public static void undo(List<Ship> ships, Cell[][] playerShipsBoard) {
+        if (ships == null || ships.isEmpty())
             return;
 
         List<Position> allNeighbors = new ArrayList<>();
+
+        Ship lastShip = ships.get(ships.size() - 1);
 
         Arrays.stream(playerShipsBoard)
                 .flatMap(Arrays::stream)
@@ -222,5 +224,7 @@ public class BattleShipsTools {
                     cell.setShip(null);
                     cell.setHit(null);
                 });
+
+        ships.remove(lastShip);
     }
 }

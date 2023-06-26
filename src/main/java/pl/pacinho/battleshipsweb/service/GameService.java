@@ -135,7 +135,7 @@ public class GameService {
 
         Player player = PlayerTools.getPlayerByName(name, game);
         Ship ship = BattleShipsTools.placeShip(player.getPlayerShipsBoard(), newShipDto);
-        player.setLastShipPlacedManually(ship);
+        player.getShipPlacedManually().add(ship);
 
         return findDtoById(gameId, name);
     }
@@ -144,7 +144,7 @@ public class GameService {
         Game game = gameLogicService.findById(gameId);
         game.setShipsManuallyInit(true);
         Player player = PlayerTools.getPlayerByName(name, game);
-        BattleShipsTools.undo(player.getLastShipPlacedManually(), player.getPlayerShipsBoard());
+        BattleShipsTools.undo(player.getShipPlacedManually(), player.getPlayerShipsBoard());
         return findDtoById(gameId, name);
     }
 }

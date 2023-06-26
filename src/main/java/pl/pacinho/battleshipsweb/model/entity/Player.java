@@ -4,6 +4,9 @@ import lombok.Getter;
 import lombok.Setter;
 import pl.pacinho.battleshipsweb.tools.BattleShipsTools;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 public class Player {
 
@@ -19,7 +22,7 @@ public class Player {
     private boolean ready;
 
     @Setter
-    private Ship lastShipPlacedManually;
+    private List<Ship> shipPlacedManually;
 
     public Player(String name, int index, boolean CPU) {
         this.CPU = CPU;
@@ -28,6 +31,7 @@ public class Player {
         this.index = index;
         this.shootingBoard = BattleShipsTools.initFreeBoard();
         this.playerShipsBoard = BattleShipsTools.initShipsBoard();
+        this.shipPlacedManually = new ArrayList<>();
     }
 
 }
