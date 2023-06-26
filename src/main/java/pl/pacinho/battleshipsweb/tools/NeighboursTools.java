@@ -18,8 +18,27 @@ public class NeighboursTools {
         return validPosition(pos);
     };
 
+    public static final Function<Position, Position> NORTH_EAST_NEIGHBOR = (inputPos) -> {
+        Position pos = new Position(inputPos.x()+1, inputPos.y() - 1);
+        return validPosition(pos);
+    };
+
+    public static final Function<Position, Position> NORTH_WEST_NEIGHBOR = (inputPos) -> {
+        Position pos = new Position(inputPos.x()-1, inputPos.y() - 1);
+        return validPosition(pos);
+    };
     public static final Function<Position, Position> SOUTH_NEIGHBOR = (inputPos) -> {
         Position pos = new Position(inputPos.x(), inputPos.y() + 1);
+        return validPosition(pos);
+    };
+
+    public static final Function<Position, Position> SOUTH_EAST_NEIGHBOR = (inputPos) -> {
+        Position pos = new Position(inputPos.x()+1, inputPos.y() + 1);
+        return validPosition(pos);
+    };
+
+    public static final Function<Position, Position> SOUTH_WEST_NEIGHBOR = (inputPos) -> {
+        Position pos = new Position(inputPos.x()-1, inputPos.y() + 1);
         return validPosition(pos);
     };
 

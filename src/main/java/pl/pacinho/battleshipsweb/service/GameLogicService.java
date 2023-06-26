@@ -44,7 +44,7 @@ public class GameLogicService {
         opponentCell.setHit(isShip);
 
         if (PlayerTools.isCPUTurn(game) && isShip) {
-            CpuGun.addCpuLastHitShot(game.getId(), shotDto);
+            CpuGun.addCpuLastHitShot(game.getId(), shotDto, playerShootingBoard);
         }
 
         BattleShipsTools.incrementShotCount(game.getGameInfoDto(), PlayerTools.getPlayerIndex(game, name));

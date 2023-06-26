@@ -12,7 +12,11 @@ import java.util.function.Function;
 public enum Direction {
 
     NORTH(NeighboursTools.NORTH_NEIGHBOR),
+    NORTH_EAST(NeighboursTools.NORTH_EAST_NEIGHBOR),
+    NORTH_WEST(NeighboursTools.NORTH_WEST_NEIGHBOR),
     SOUTH(NeighboursTools.SOUTH_NEIGHBOR),
+    SOUTH_EAST(NeighboursTools.SOUTH_EAST_NEIGHBOR),
+    SOUTH_WEST(NeighboursTools.SOUTH_WEST_NEIGHBOR),
     EAST(NeighboursTools.EAST_NEIGHBOR),
     WEST(NeighboursTools.WEST_NEIGHBOR);
 

@@ -34,6 +34,20 @@ public class BattleShipsTools {
             for (int j = 0; j < GameConfig.MAX_MASTS_COUNT - i + 1; j++) {
                 Ship ship = new Ship();
 
+                System.out.println("TO place: " + i);
+                System.out.println("Current Board:");
+
+                for (int x = 0; x < cells.length; x++) {
+                    for (int z = 0; z < cells[i].length; z++) {
+                        Cell cell = cells[x][z];
+                        if (cell.getShip() == null)
+                            System.out.print("*");
+                        else
+                            System.out.print(cell.getShip().getMasts().size());
+                    }
+                    System.out.print("\n");
+                }
+
                 List<Position> shipPositions = generateShips(i, availableCells);
                 removeFromAvailableCells(shipPositions, availableCells);
                 ship.setMasts(shipPositions);
@@ -57,7 +71,7 @@ public class BattleShipsTools {
 
     private static void removeFromAvailableCells(List<Position> shipPositions, List<Position> availableCells) {
         availableCells.removeAll(shipPositions);
-        availableCells.removeAll(NeighboursTools.getNeighbours(shipPositions));
+        //availableCells.removeAll(NeighboursTools.getNeighbours(shipPositions));
     }
 
 
@@ -74,40 +88,54 @@ public class BattleShipsTools {
     }
 
     private static List<Position> generateShips(int mastsCunt, List<Position> availableCells) {
-        List<Position> shipPositions = new ArrayList<>();
+        List<Position> availableCellsCopy = new ArrayList<>(availableCells);
+
         while (true) {
-            shipPositions.clear();
-            Position startPosition = availableCells.get(RandomUtils.getInt(0, availableCells.size() - 1));
+            List<Position> shipPositions = new ArrayList<>();
+
+            Position startPosition = availableCellsCopy.get(RandomUtils.getInt(0, availableCellsCopy.size() - 1));
 
             if (!isCorrectPosition(availableCells, startPosition)) {
+                availableCellsCopy.remove(startPosition);
                 continue;
             }
 
             shipPositions.add(startPosition);
-            ShipType shipType = ShipType.values()[RandomUtils.getInt(0, ShipType.values().length)];
-
-            Position actualPosition = startPosition;
-            for (int i = 1; i < mastsCunt; i++) {
-                Position neighbour = shipType.getNeighbour(actualPosition);
-                if (neighbour == null || !isCorrectPosition(availableCells, neighbour))
-                    break;
-
-                actualPosition = neighbour;
-                shipPositions.add(neighbour);
+            if (mastsCunt == shipPositions.size()) {
+                return shipPositions;
             }
 
-            if (shipPositions.size() == mastsCunt)
-                return shipPositions;
+            ShipType shipType = ShipType.values()[RandomUtils.getInt(0, ShipType.values().length)];
+            List<Position> shipPositions1 = getShipPositions(mastsCunt, availableCells, startPosition, shipType);
+            if (shipPositions1.isEmpty())
+                shipPositions1 = getShipPositions(mastsCunt, availableCells, startPosition, shipType == ShipType.HORIZONTAL ? ShipType.VERTICAL : ShipType.HORIZONTAL);
 
+            if (!shipPositions1.isEmpty()) {
+                shipPositions.addAll(shipPositions1);
+                return shipPositions;
+            } else {
+                availableCellsCopy.remove(startPosition);
+            }
         }
+    }
+
+    private static List<Position> getShipPositions(int mastsCunt, List<Position> availableCells, Position startPosition, ShipType shipType) {
+        List<Position> out = new ArrayList<>();
+        Position actualPosition = startPosition;
+        for (int i = 1; i < mastsCunt; i++) {
+            Position neighbour = shipType.getNeighbour(actualPosition);
+            if (neighbour == null || !isCorrectPosition(availableCells, neighbour))
+                break;
+
+            actualPosition = neighbour;
+            out.add(neighbour);
+        }
+        return out;
     }
 
     private static boolean isCorrectPosition(List<Position> availableCells, Position position) {
         List<Position> neighbours = NeighboursTools.getNeighbours(position);
-        if (!NeighboursTools.checkAllNeighboursIsAvailable(availableCells, neighbours))
-            return false;
-
-        return true;
+        return NeighboursTools.checkAllNeighboursIsAvailable(availableCells, neighbours);
     }
 
     public static void checkShipSunk(Ship ship, Cell[][] opponentShipsBoard) {

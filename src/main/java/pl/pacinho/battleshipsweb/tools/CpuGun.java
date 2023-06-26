@@ -79,12 +79,20 @@ public class CpuGun {
         CPU_LAST_HIT_SHOTS.remove(gameId);
     }
 
-    public static void addCpuLastHitShot(String gameId, ShotDto shotDto) {
+    public static void addCpuLastHitShot(String gameId, ShotDto shotDto, Cell[][] playerShootingBoard) {
         CPU_LAST_HIT_SHOTS.computeIfAbsent(gameId, key -> new ArrayList<>())
                 .add(shotDto);
 
         List<Position> cells = CPU_NEXT_SHOTS.computeIfAbsent(gameId, key -> new ArrayList<>());
-        cells.addAll(NeighboursTools.getNeighbours(new Position(shotDto.x(), shotDto.y())));
+        cells.addAll(filterNeighbors(shotDto, playerShootingBoard));
+    }
+
+    private static List<Position> filterNeighbors(ShotDto shotDto, Cell[][] playerShootingBoard) {
+        List<Position> neighbours = NeighboursTools.getNeighbours(new Position(shotDto.x(), shotDto.y()));
+        List<Position> out = new ArrayList<>();
+        out.addAll(removeIncorrectPositions(shotDto, neighbours, ShipType.HORIZONTAL, playerShootingBoard));
+        out.addAll(removeIncorrectPositions(shotDto, neighbours, ShipType.VERTICAL, playerShootingBoard));
+        return out;
     }
 
     private static ShipType checkShipType(List<ShotDto> cpuLastShots) {
