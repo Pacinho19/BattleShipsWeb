@@ -53,7 +53,7 @@ public class GameLogicService {
             BattleShipsTools.checkShipSunk(opponentCell.getShip(), opponentShipsBoard);
 
             if (opponentCell.getShip().isSunk()) {
-                CpuGun.clearCpuShot(game.getId());
+                if(PlayerTools.isCPUTurn(game)) CpuGun.clearCpuShot(game.getId());
                 BattleShipsTools.hitNeighboursForDrownedShip(opponentCell.getShip(), opponentShipsBoard, playerShootingBoard);
                 BattleShipsTools.updateShipsCount(PlayerTools.getPlayerIndex(game, name), opponentCell.getShip(), game.getGameInfoDto());
             }

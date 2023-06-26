@@ -85,7 +85,7 @@ public class GameService {
         String result = gameLogicService.shot(name, game, shotDto);
         finishRound(game, new ReloadBoardDto(result, getShotAnimationInfo(shotDto, PlayerTools.getOponentName(name, game))));
 
-        if (PlayerTools.isCPUTurn(game)) {
+        if (PlayerTools.isCPUTurn(game) && game.getStatus() == GameStatus.IN_PROGRESS) {
             SleepUtils.sleep(1_000);
             shot("CPU", gameId, CpuGun.shot(gameId, PlayerTools.getPlayerShootingBoard(game.getPlayers(), "CPU")));
         }
