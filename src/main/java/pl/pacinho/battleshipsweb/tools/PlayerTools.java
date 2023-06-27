@@ -30,14 +30,12 @@ public class PlayerTools {
         return playerOptional.map(func).orElse(null);
     }
 
-    public static Cell[][] getOponentShipsBoard(LinkedList<Player> players, String name) {
-        if (name == null) return null;
+    public static Cell[][] getOponentShipsBoard(Game game, String name) {
+        return getPlayerCell(game.getPlayers(), getOponentName(name, game), Player::getPlayerShipsBoard);
+    }
 
-        Optional<Player> playerOptional = players.stream()
-                .filter(p -> !p.getName().equals(name))
-                .findFirst();
-
-        return playerOptional.map(Player::getPlayerShipsBoard).orElse(null);
+    public static Cell[][] getOponentShootingBoard(Game game, String name) {
+        return getPlayerCell(game.getPlayers(), getOponentName(name, game), Player::getShootingBoard);
     }
 
     public static Integer getPlayerIndex(Game game, String name) {

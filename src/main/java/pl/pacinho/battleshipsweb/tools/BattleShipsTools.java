@@ -241,4 +241,17 @@ public class BattleShipsTools {
 
         ships.remove(lastShip);
     }
+
+    public static void showShips(Cell[][] playerShipsBoard, Cell[][] oponentShootingBoard) {
+        Arrays.stream(oponentShootingBoard)
+                .flatMap(Arrays::stream)
+                .filter(c -> c.getHit() == null)
+                .forEach(cell -> {
+                    Cell playerCell = playerShipsBoard[cell.getY()][cell.getX()];
+                    if (playerCell.getHit() != null || playerCell.getShip() == null)
+                        return;
+
+                    cell.setShip(playerCell.getShip());
+                });
+    }
 }

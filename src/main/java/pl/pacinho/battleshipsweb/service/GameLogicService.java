@@ -36,7 +36,7 @@ public class GameLogicService {
         Cell[][] playerShootingBoard = PlayerTools.getPlayerShootingBoard(game.getPlayers(), name);
         Cell shotingCell = playerShootingBoard[shotDto.y()][shotDto.x()];
 
-        Cell[][] opponentShipsBoard = PlayerTools.getOponentShipsBoard(game.getPlayers(), name);
+        Cell[][] opponentShipsBoard = PlayerTools.getOponentShipsBoard(game, name);
         Cell opponentCell = opponentShipsBoard[shotDto.y()][shotDto.x()];
 
         boolean isShip = opponentCell.getShip() != null;
@@ -60,6 +60,7 @@ public class GameLogicService {
 
             if (BattleShipsTools.checkAllShipsIsSunk(PlayerTools.getPlayerIndex(game, name), game.getGameInfoDto())) {
                 game.setStatus(GameStatus.FINISHED);
+                BattleShipsTools.showShips(PlayerTools.getPlayerShipsBoard(game.getPlayers(), name), PlayerTools.getOponentShootingBoard(game, name));
                 return "Player " + name + " win the game !";
             }
 

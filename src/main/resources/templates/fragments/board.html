@@ -43,7 +43,7 @@
                                 </a>
 
                                 <div th:if="${game.actualPlayer!=game.playerIndex || (game.actualPlayer==game.playerIndex && col.hit!=null) || game.status.name=='FINISHED'} "
-                                     th:style="${'background-color:' + (col.hit==null ? '#43b5d5' : col.hit ? 'green' : 'red') + '; border: 1px solid;width:100%;height:100%'}">
+                                     th:style="${'background-color:' + (col.ship!=null ? 'black' : (col.hit==null ? '#43b5d5' : col.hit ? 'green' : 'red')) + '; border: 1px solid;width:100%;height:100%'}">
                                 </div>
                             </td>
                         <tr>
