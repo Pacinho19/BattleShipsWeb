@@ -69,7 +69,8 @@ public class CpuGun {
                 .filter(c -> c.getHit() == null)
                 .toList();
 
-        int shotIdx = RandomUtils.getInt(0, availablePos.size() - 1);
+        int bound = availablePos.size() - 1;
+        int shotIdx = bound==0 ? 0 : RandomUtils.getInt(0, bound);
         Cell cell = availablePos.get(shotIdx);
         return new ShotDto(cell.getX(), cell.getY());
     }
